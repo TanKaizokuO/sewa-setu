@@ -6,15 +6,15 @@ import {
 
 // Reference palette slot 1 (validated) for single-series magnitude; text stays in ink tokens.
 const SERIES = "#2a78d6";
-const GRID = "oklch(0.92 0.01 255)";
-const INK_2 = "#52514e";
+const GRID = "var(--border)";
+const INK_2 = "var(--muted-foreground)";
 
 const axis = { stroke: GRID, tick: { fill: INK_2, fontSize: 11 }, tickLine: false, axisLine: false } as const;
 
 function Tip({ active, payload, label, unit = "" }: { active?: boolean; payload?: { name: string; value: number; payload: Record<string, unknown> }[]; label?: string; unit?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border bg-white px-3 py-2 text-xs shadow-md">
+    <div className="rounded-lg border bg-card px-3 py-2 text-xs shadow-md">
       <div className="mb-0.5 font-medium">{label}</div>
       {payload
         .filter((p) => p.value != null)
@@ -59,7 +59,7 @@ export function HBar({
         <CartesianGrid horizontal={false} stroke={GRID} />
         <XAxis type="number" {...axis} hide />
         <YAxis type="category" dataKey="label" {...axis} width={150} />
-        <Tooltip content={<Tip unit={unit} />} cursor={{ fill: "oklch(0.95 0.01 255)" }} />
+        <Tooltip content={<Tip unit={unit} />} cursor={{ fill: "var(--muted)" }} />
         <Bar dataKey="value" name="Value" radius={[0, 4, 4, 0]} isAnimationActive={false} label={{ position: "right", fill: INK_2, fontSize: 11, formatter: (v: unknown) => `${v}${unit}` }}>
           {data.map((d) => (
             <Cell key={d.label} fill={highlightAbove != null && d.value > highlightAbove ? "#e34948" : SERIES} />

@@ -42,7 +42,7 @@ export function ActionPanel({
     );
 
   return (
-    <section className="rounded-2xl border-2 border-primary/30 bg-white p-5">
+    <section className="rounded-2xl border-2 border-primary/30 bg-card p-5">
       <h2 className="flex items-center gap-2 font-semibold">
         <PencilLine className="size-4" />
         {role === "patwari" ? tt("Field verification report", "पटवारी प्रतिवेदन") : tt("Decision", "निर्णय")}

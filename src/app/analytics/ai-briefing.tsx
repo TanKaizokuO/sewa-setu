@@ -21,7 +21,7 @@ export function AiBriefing({ summary }: { summary: unknown }) {
   }
 
   return (
-    <section className="mt-5 rounded-2xl border border-saffron/40 bg-gradient-to-br from-saffron/10 to-white p-5">
+    <section className="mt-5 rounded-2xl border border-saffron/40 bg-gradient-to-br from-saffron/10 to-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 font-semibold">
           <Sparkles className="size-5 text-saffron" /> {tt("AI briefing for the Collector", "कलेक्टर हेतु एआई ब्रीफिंग")}

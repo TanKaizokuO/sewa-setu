@@ -8,12 +8,12 @@ export async function ServiceCard({ service: s }: { service: Service }) {
   return (
     <Link
       href={`/services/${s.slug}`}
-      className="group flex flex-col rounded-2xl border bg-white p-5 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg"
+      className="group flex flex-col rounded-2xl border bg-card p-5 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg"
     >
       <div className="mb-2 flex items-start justify-between gap-2">
         <h3 className="font-semibold group-hover:text-primary">{t(s.name)}</h3>
         {s.fullFlow && (
-          <span className="flex shrink-0 items-center gap-1 rounded-full bg-saffron/15 px-2 py-0.5 text-[10px] font-semibold text-[oklch(0.5_0.14_55)]">
+          <span className="flex shrink-0 items-center gap-1 rounded-full bg-saffron/15 px-2 py-0.5 text-[10px] font-semibold text-saffron-ink">
             <Sparkles className="size-3" /> {tt("AI fast-track", "एआई फास्ट-ट्रैक")}
           </span>
         )}

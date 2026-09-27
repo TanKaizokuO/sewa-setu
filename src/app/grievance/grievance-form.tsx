@@ -25,7 +25,7 @@ type Result = {
 const PRIORITY_CLS: Record<string, string> = {
   critical: "bg-destructive text-white",
   high: "bg-destructive/15 text-destructive",
-  medium: "bg-warning/20 text-[oklch(0.5_0.13_60)]",
+  medium: "bg-warning/20 text-warning-ink",
   low: "bg-muted text-muted-foreground",
 };
 
@@ -47,7 +47,7 @@ export function GrievanceForm({ initialText, loggedIn }: { initialText: string; 
 
   if (res)
     return (
-      <div className="mt-5 space-y-4 rounded-2xl border bg-white p-5">
+      <div className="mt-5 space-y-4 rounded-2xl border bg-card p-5">
         <div className="text-sm text-muted-foreground">{tt("Complaint registered", "शिकायत दर्ज")}</div>
         <div className="font-mono text-xl font-semibold">{res.refNo}</div>
         <p className="rounded-xl bg-secondary p-3 text-sm">{lang === "hi" ? res.reply_hi : res.reply_en}</p>
@@ -80,7 +80,7 @@ export function GrievanceForm({ initialText, loggedIn }: { initialText: string; 
     );
 
   return (
-    <div className="mt-5 space-y-3 rounded-2xl border bg-white p-5">
+    <div className="mt-5 space-y-3 rounded-2xl border bg-card p-5">
       <textarea
         value={listening ? `${text} ${interim}` : text}
         onChange={(e) => setText(e.target.value)}

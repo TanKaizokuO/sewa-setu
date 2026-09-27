@@ -23,7 +23,7 @@ export type VerifyPayload = {
 
 const STATUS = {
   match: { icon: CheckCircle2, cls: "text-success", bg: "bg-success/10", en: "Match", hi: "मेल" },
-  partial: { icon: AlertTriangle, cls: "text-[oklch(0.62_0.15_65)]", bg: "bg-warning/15", en: "Partial", hi: "आंशिक" },
+  partial: { icon: AlertTriangle, cls: "text-warning-ink", bg: "bg-warning/15", en: "Partial", hi: "आंशिक" },
   mismatch: { icon: XCircle, cls: "text-destructive", bg: "bg-destructive/10", en: "Mismatch", hi: "मेल नहीं" },
   missing: { icon: HelpCircle, cls: "text-muted-foreground", bg: "bg-muted", en: "Not found", hi: "नहीं मिला" },
 } as const;
@@ -83,7 +83,7 @@ export function DocEvidence({
 
       <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 font-medium ${typeOk ? "bg-success/15 text-[oklch(0.42_0.12_150)]" : "bg-destructive/10 text-destructive"}`}>
+          <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 font-medium ${typeOk ? "bg-success/15 text-success-ink" : "bg-destructive/10 text-destructive"}`}>
             {typeOk ? <CheckCircle2 className="size-3.5" /> : <XCircle className="size-3.5" />}
             {tt("Detected", "पहचाना गया")}: {detectedLabel ? t(detectedLabel) : tt("Unknown document", "अज्ञात दस्तावेज़")}
           </span>
@@ -140,7 +140,7 @@ function CheckRow({ c, officer }: { c: VerificationCheck; officer?: { documentId
           <span className={`text-xs font-normal ${s.cls}`}>· {t(s)}</span>
         </span>
         <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground" title="AI confidence">
-          <span className="h-1.5 w-12 overflow-hidden rounded-full bg-black/10">
+          <span className="h-1.5 w-12 overflow-hidden rounded-full bg-foreground/10">
             <span className="block h-full rounded-full bg-primary" style={{ width: `${Math.round(c.confidence * 100)}%` }} />
           </span>
           {Math.round(c.confidence * 100)}%
@@ -166,10 +166,10 @@ function CheckRow({ c, officer }: { c: VerificationCheck; officer?: { documentId
       )}
       {officer?.canOverride && !c.overridden && c.status !== "match" && (
         <div className="mt-2 flex gap-2">
-          <button disabled={busy} onClick={() => override("match")} className="flex items-center gap-1 rounded-md border bg-white px-2 py-1 text-xs hover:bg-success/10">
+          <button disabled={busy} onClick={() => override("match")} className="flex items-center gap-1 rounded-md border bg-card px-2 py-1 text-xs hover:bg-success/10">
             {busy ? <Loader2 className="size-3 animate-spin" /> : <CheckCircle2 className="size-3 text-success" />} {tt("Mark verified", "सत्यापित करें")}
           </button>
-          <button disabled={busy} onClick={() => override("mismatch")} className="flex items-center gap-1 rounded-md border bg-white px-2 py-1 text-xs hover:bg-destructive/10">
+          <button disabled={busy} onClick={() => override("mismatch")} className="flex items-center gap-1 rounded-md border bg-card px-2 py-1 text-xs hover:bg-destructive/10">
             <XCircle className="size-3 text-destructive" /> {tt("Confirm discrepancy", "विसंगति पुष्टि")}
           </button>
         </div>

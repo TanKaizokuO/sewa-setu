@@ -51,11 +51,11 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">
           {/* AI drafted note */}
-          <section className="rounded-2xl border border-saffron/40 bg-gradient-to-br from-saffron/10 to-white p-5">
+          <section className="rounded-2xl border border-saffron/40 bg-gradient-to-br from-saffron/10 to-card p-5">
             <h2 className="flex items-center gap-2 font-semibold">
               <Sparkles className="size-5 text-saffron" /> {tt("AI pre-verification summary", "एआई पूर्व-सत्यापन सारांश")}
               {app.aiScore != null && (
-                <span className="ml-auto rounded-full bg-white px-2 py-0.5 text-xs font-medium ring-1 ring-border">
+                <span className="ml-auto rounded-full bg-card px-2 py-0.5 text-xs font-medium ring-1 ring-border">
                   {tt("confidence", "विश्वास")} {Math.round(app.aiScore * 100)}% · {app.aiSummary?.verdict}
                 </span>
               )}
@@ -68,7 +68,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
               <p className="mt-2 animate-pulse text-sm text-muted-foreground">{tt("AI is drafting the verification note…", "एआई सत्यापन नोट तैयार कर रहा है…")}</p>
             )}
             {app.aiSummary?.flags && app.aiSummary.flags.length > 0 && (
-              <ul className="mt-3 space-y-1 rounded-xl bg-white/70 p-3 text-xs">
+              <ul className="mt-3 space-y-1 rounded-xl bg-card/70 p-3 text-xs">
                 {app.aiSummary.flags.map((f, i) => (
                   <li key={i} className="flex gap-1.5">
                     <FileWarning className="size-3.5 shrink-0 text-destructive" /> {f}
@@ -82,7 +82,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
           </section>
 
           {/* Documents with evidence */}
-          <section className="rounded-2xl border bg-white p-5">
+          <section className="rounded-2xl border bg-card p-5">
             <h2 className="mb-3 font-semibold">{tt("Documents & AI evidence", "दस्तावेज़ और एआई साक्ष्य")}</h2>
             {docs.length === 0 && (
               <p className="rounded-xl bg-muted p-4 text-sm text-muted-foreground">
@@ -112,7 +112,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
           </section>
 
           {/* Form data */}
-          <section className="rounded-2xl border bg-white p-5">
+          <section className="rounded-2xl border bg-card p-5">
             <h2 className="mb-2 font-semibold">{tt("Application details", "आवेदन विवरण")}</h2>
             <dl className="grid gap-x-6 text-sm sm:grid-cols-2">
               {service.fields.length > 0 && Object.keys(app.formData).length > 0 ? (
@@ -139,10 +139,10 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
           />
 
           {/* Explainable risk */}
-          <section className="rounded-2xl border bg-white p-5">
+          <section className="rounded-2xl border bg-card p-5">
             <h2 className="font-semibold">{tt("SLA-breach risk", "समय-सीमा उल्लंघन जोखिम")}</h2>
             <div className="mt-1 flex items-baseline gap-2">
-              <span className={`text-3xl font-bold ${risk.level === "high" ? "text-destructive" : risk.level === "medium" ? "text-[oklch(0.6_0.15_65)]" : "text-success"}`}>
+              <span className={`text-3xl font-bold ${risk.level === "high" ? "text-destructive" : risk.level === "medium" ? "text-warning-ink" : "text-success"}`}>
                 {Math.round(risk.score * 100)}
               </span>
               <span className="text-sm capitalize text-muted-foreground">{risk.level}</span>
@@ -168,7 +168,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
           </section>
 
           {/* Audit trail */}
-          <section className="rounded-2xl border bg-white p-5">
+          <section className="rounded-2xl border bg-card p-5">
             <h2 className="mb-3 flex items-center gap-2 font-semibold">
               <UserCog className="size-4" /> {tt("Audit trail", "ऑडिट ट्रेल")}
             </h2>

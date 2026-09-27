@@ -49,7 +49,7 @@ export default async function ServiceDetail({ params }: PageProps<"/services/[sl
         <Stat icon={<Workflow className="size-4" />} label={tt("Steps", "चरण")} value={String(s.stages.length)} />
       </div>
 
-      <section className="mt-6 rounded-2xl border bg-white p-5">
+      <section className="mt-6 rounded-2xl border bg-card p-5">
         <h2 className="font-semibold">{tt("Who can apply", "कौन आवेदन कर सकता है")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t(s.eligibilityText)}</p>
         {elig && (
@@ -70,7 +70,7 @@ export default async function ServiceDetail({ params }: PageProps<"/services/[sl
       </section>
 
       {s.documents.length > 0 && (
-        <section className="mt-4 rounded-2xl border bg-white p-5">
+        <section className="mt-4 rounded-2xl border bg-card p-5">
           <h2 className="font-semibold">{tt("Documents", "दस्तावेज़")}</h2>
           <ul className="mt-2 space-y-2">
             {s.documents.map((d) => (
@@ -94,12 +94,12 @@ export default async function ServiceDetail({ params }: PageProps<"/services/[sl
         </section>
       )}
 
-      <section className="mt-4 rounded-2xl border bg-white p-5">
+      <section className="mt-4 rounded-2xl border bg-card p-5">
         <h2 className="font-semibold">{tt("How your application moves", "आपका आवेदन कैसे आगे बढ़ता है")}</h2>
         <ol className="mt-3 flex flex-col gap-2 md:flex-row">
           {s.stages.map((st, i) => (
             <li key={st} className="flex flex-1 items-center gap-2 rounded-xl bg-muted/60 px-3 py-2 text-sm">
-              <span className="grid size-6 place-items-center rounded-full bg-primary text-xs font-bold text-white">{i + 1}</span>
+              <span className="grid size-6 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{i + 1}</span>
               {t(STAGE_LABEL[st])}
             </li>
           ))}
@@ -111,7 +111,7 @@ export default async function ServiceDetail({ params }: PageProps<"/services/[sl
 
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-xl border bg-white p-3">
+    <div className="rounded-xl border bg-card p-3">
       <div className="flex items-center gap-1 text-xs text-muted-foreground">
         {icon} {label}
       </div>

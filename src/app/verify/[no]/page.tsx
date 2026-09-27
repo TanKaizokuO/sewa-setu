@@ -16,7 +16,7 @@ export default async function VerifyPage({ params }: PageProps<"/verify/[no]">) 
           <BadgeCheck className="mx-auto size-16 text-success" />
           <h1 className="mt-3 text-xl font-bold">Genuine certificate</h1>
           <p className="text-sm text-muted-foreground">Issued via Sewa Setu (prototype)</p>
-          <dl className="mt-6 space-y-2 rounded-2xl border bg-white p-5 text-left text-sm">
+          <dl className="mt-6 space-y-2 rounded-2xl border bg-card p-5 text-left text-sm">
             <div className="flex justify-between"><dt className="text-muted-foreground">Certificate</dt><dd className="font-mono">{no}</dd></div>
             <div className="flex justify-between"><dt className="text-muted-foreground">Type</dt><dd>{s?.name.en}</dd></div>
             <div className="flex justify-between"><dt className="text-muted-foreground">Holder</dt><dd>{app.applicantName}</dd></div>

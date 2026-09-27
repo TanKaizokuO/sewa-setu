@@ -63,7 +63,7 @@ export default async function TrackPage({ params, searchParams }: PageProps<"/tr
         </div>
       )}
 
-      <div className="rounded-2xl border bg-white p-5">
+      <div className="rounded-2xl border bg-card p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <div className="text-xs text-muted-foreground">{tt("Reference no.", "संदर्भ क्रमांक")}</div>
@@ -98,7 +98,7 @@ export default async function TrackPage({ params, searchParams }: PageProps<"/tr
 
         {app.status === "correction_needed" && app.officerNote && (
           <div className="mt-4 flex gap-2 rounded-xl bg-warning/15 p-3 text-sm">
-            <AlertTriangle className="size-4 shrink-0 text-[oklch(0.6_0.15_65)]" />
+            <AlertTriangle className="size-4 shrink-0 text-warning-ink" />
             <div>
               <b>{tt("Officer's request", "अधिकारी का अनुरोध")}:</b> {app.officerNote}
             </div>
@@ -128,7 +128,7 @@ export default async function TrackPage({ params, searchParams }: PageProps<"/tr
         )}
       </div>
 
-      <div className="mt-4 rounded-2xl border bg-white p-5">
+      <div className="mt-4 rounded-2xl border bg-card p-5">
         <h2 className="mb-3 font-semibold">{tt("Live timeline", "लाइव समयरेखा")}</h2>
         <ol className="relative space-y-4 border-l-2 border-muted pl-5">
           {timeline.map((e) => {
@@ -136,7 +136,7 @@ export default async function TrackPage({ params, searchParams }: PageProps<"/tr
             const detail = e.detail as { flags?: string[]; note?: string; citizenNote?: string; model?: string } | null;
             return (
               <li key={e.id} className="relative">
-                <span className={`absolute -left-[31px] grid size-6 place-items-center rounded-full border-2 border-white ${e.actor === "ai" ? "bg-saffron" : e.kind === "override" ? "bg-primary" : "bg-success"} text-white`}>
+                <span className={`absolute -left-[31px] grid size-6 place-items-center rounded-full border-2 border-card ${e.actor === "ai" ? "bg-saffron" : e.kind === "override" ? "bg-primary" : "bg-success"} text-background`}>
                   <Icon className="size-3" />
                 </span>
                 <div className="text-sm font-medium">{lang === "hi" ? e.message.hi : e.message.en}</div>
@@ -172,7 +172,7 @@ export default async function TrackPage({ params, searchParams }: PageProps<"/tr
           </h2>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {recs.map((s) => (
-              <Link key={s.slug} href={`/services/${s.slug}`} className="rounded-xl border bg-white p-3 hover:border-primary">
+              <Link key={s.slug} href={`/services/${s.slug}`} className="rounded-xl border bg-card p-3 hover:border-primary">
                 <div className="font-medium">{t(s.name)}</div>
                 <div className="text-xs text-muted-foreground">{t(s.eligibilityText)}</div>
               </Link>

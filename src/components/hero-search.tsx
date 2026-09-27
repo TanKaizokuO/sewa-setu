@@ -29,7 +29,7 @@ export function HeroSearch() {
           e.preventDefault();
           go(q);
         }}
-        className="flex items-center gap-2 rounded-2xl border-2 border-white/30 bg-white p-2 shadow-2xl shadow-primary/30"
+        className="flex items-center gap-2 rounded-2xl border-2 border-white/30 bg-card p-2 shadow-2xl shadow-primary/30"
       >
         <Sparkles className="ml-2 size-5 shrink-0 text-saffron" />
         <input
@@ -50,7 +50,7 @@ export function HeroSearch() {
             <Mic className="size-5" />
           </button>
         )}
-        <button type="submit" className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-white hover:bg-primary/90">
+        <button type="submit" className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground hover:bg-primary/90">
           <Search className="size-5" />
         </button>
       </form>

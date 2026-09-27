@@ -37,7 +37,7 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-gradient-to-br from-[oklch(0.36_0.13_258)] via-primary to-[oklch(0.48_0.12_235)] text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[oklch(0.36_0.13_258)] via-[oklch(0.42_0.13_255)] to-[oklch(0.48_0.12_235)] text-white">
         <div className="pointer-events-none absolute -right-24 -top-24 size-96 rounded-full bg-saffron/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 left-10 size-96 rounded-full bg-success/20 blur-3xl" />
         <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-14 md:py-20">
@@ -64,7 +64,7 @@ export default async function Home() {
           { v: `${Math.round((stats.withinSla / Math.max(1, stats.decided)) * 100)}%`, l: tt("delivered within SLA", "समय-सीमा में निपटारा") },
           { v: `${stats.avgDays} ${tt("days", "दिन")}`, l: tt("average turnaround", "औसत निपटान समय") },
         ].map((s) => (
-          <div key={s.l} className="relative rounded-2xl border bg-white p-4 shadow-sm">
+          <div key={s.l} className="relative rounded-2xl border bg-card p-4 shadow-sm">
             <div className="text-2xl font-bold text-primary">{s.v}</div>
             <div className="text-xs text-muted-foreground">{s.l}</div>
           </div>
@@ -85,14 +85,14 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-y bg-white">
+      <section className="border-y bg-card">
         <div className="mx-auto max-w-6xl px-4 py-12">
           <h2 className="mb-6 text-xl font-bold">{tt("How it works", "यह कैसे काम करता है")}</h2>
           <ol className="grid gap-4 md:grid-cols-4">
             {steps.map((s, i) => (
               <li key={i} className="rounded-2xl bg-secondary/60 p-5">
                 <div className="mb-3 flex items-center gap-2">
-                  <span className="grid size-7 place-items-center rounded-full bg-primary text-xs font-bold text-white">{i + 1}</span>
+                  <span className="grid size-7 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{i + 1}</span>
                   <s.icon className="size-5 text-primary" />
                 </div>
                 <p className="text-sm font-medium">{t(s)}</p>
@@ -106,7 +106,7 @@ export default async function Home() {
         <h2 className="mb-6 text-xl font-bold">{tt("What makes it next-generation", "इसे अगली पीढ़ी का क्या बनाता है")}</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
-            <div key={f.en} className="rounded-2xl border bg-white p-5">
+            <div key={f.en} className="rounded-2xl border bg-card p-5">
               <f.icon className="mb-3 size-6 text-saffron" />
               <div className="font-semibold">{t(f)}</div>
               <p className="mt-1 text-sm text-muted-foreground">{t(f.d)}</p>

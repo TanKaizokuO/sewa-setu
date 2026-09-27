@@ -11,7 +11,7 @@ export function LangToggle() {
         <button
           key={l}
           onClick={() => setLang(l)}
-          className={`rounded-full px-2.5 py-1 transition ${lang === l ? "bg-white text-primary shadow-sm" : "text-muted-foreground"}`}
+          className={`rounded-full px-2.5 py-1 transition ${lang === l ? "bg-card text-primary shadow-sm" : "text-muted-foreground"}`}
         >
           {l === "hi" ? "हिंदी" : "EN"}
         </button>

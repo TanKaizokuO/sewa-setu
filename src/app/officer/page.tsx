@@ -49,7 +49,7 @@ export default async function OfficerQueue() {
         <Kpi icon={<Gauge className="size-4" />} label={tt("Online (new)", "ऑनलाइन (नए)")} value={live} />
       </div>
 
-      <div className="mt-5 overflow-x-auto rounded-2xl border bg-white">
+      <div className="mt-5 overflow-x-auto rounded-2xl border bg-card">
         <table className="w-full min-w-[760px] text-sm">
           <thead className="border-b bg-muted/40 text-left text-xs text-muted-foreground">
             <tr>
@@ -72,7 +72,7 @@ export default async function OfficerQueue() {
                     <div className="flex items-center gap-2">
                       <span
                         className={`grid size-9 place-items-center rounded-lg text-xs font-bold ${
-                          risk.level === "high" ? "bg-destructive/15 text-destructive" : risk.level === "medium" ? "bg-warning/20 text-[oklch(0.5_0.13_60)]" : "bg-success/15 text-[oklch(0.42_0.12_150)]"
+                          risk.level === "high" ? "bg-destructive/15 text-destructive" : risk.level === "medium" ? "bg-warning/20 text-warning-ink" : "bg-success/15 text-success-ink"
                         }`}
                       >
                         {Math.round(risk.score * 100)}
@@ -83,19 +83,19 @@ export default async function OfficerQueue() {
                   <td className="px-4 py-3">
                     <div className="font-medium">
                       {a.applicantName}{" "}
-                      {!a.isSeed && <span className="ml-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-white">{tt("ONLINE", "ऑनलाइन")}</span>}
+                      {!a.isSeed && <span className="ml-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">{tt("ONLINE", "ऑनलाइन")}</span>}
                     </div>
                     <div className="font-mono text-xs text-muted-foreground">{a.refNo}</div>
                   </td>
                   <td className="px-4 py-3">{t(s.name)}</td>
-                  <td className={`px-4 py-3 text-xs ${daysLeft < 0 ? "font-semibold text-destructive" : daysLeft <= 1 ? "text-[oklch(0.55_0.15_60)]" : ""}`}>
+                  <td className={`px-4 py-3 text-xs ${daysLeft < 0 ? "font-semibold text-destructive" : daysLeft <= 1 ? "text-warning-ink" : ""}`}>
                     {daysLeft < 0 ? tt(`${-daysLeft}d overdue`, `${-daysLeft} दिन विलंब`) : tt(`${daysLeft}d left`, `${daysLeft} दिन शेष`)}
                   </td>
                   <td className="px-4 py-3">
                     {v ? (
                       <span
                         className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          v === "clear" ? "bg-success/15 text-[oklch(0.42_0.12_150)]" : v === "review" ? "bg-warning/20 text-[oklch(0.5_0.13_60)]" : "bg-destructive/10 text-destructive"
+                          v === "clear" ? "bg-success/15 text-success-ink" : v === "review" ? "bg-warning/20 text-warning-ink" : "bg-destructive/10 text-destructive"
                         }`}
                       >
                         {v === "clear" ? tt("All clear", "सब सही") : v === "review" ? tt("Review", "समीक्षा") : tt("Mismatch", "विसंगति")} · {Math.round((a.aiScore ?? 0) * 100)}%
@@ -122,7 +122,7 @@ export default async function OfficerQueue() {
 
 function Kpi({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: "destructive" }) {
   return (
-    <div className="rounded-2xl border bg-white p-4">
+    <div className="rounded-2xl border bg-card p-4">
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
         {icon} {label}
       </div>

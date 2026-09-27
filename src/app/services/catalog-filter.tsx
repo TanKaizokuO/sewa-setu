@@ -22,7 +22,7 @@ export function CatalogFilter({ q, dept, depts }: { q: string; dept: string; dep
           e.preventDefault();
           go(text, dept);
         }}
-        className="flex max-w-xl items-center gap-2 rounded-xl border bg-white px-3"
+        className="flex max-w-xl items-center gap-2 rounded-xl border bg-card px-3"
       >
         <Search className="size-4 text-muted-foreground" />
         <input
@@ -40,7 +40,7 @@ export function CatalogFilter({ q, dept, depts }: { q: string; dept: string; dep
           <button
             key={d.value}
             onClick={() => go(text, d.value)}
-            className={`rounded-full border px-3 py-1 text-xs ${dept === d.value ? "border-primary bg-primary text-white" : "bg-white hover:bg-muted"}`}
+            className={`rounded-full border px-3 py-1 text-xs ${dept === d.value ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-muted"}`}
           >
             {d.label}
           </button>

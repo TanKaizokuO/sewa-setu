@@ -45,7 +45,7 @@ export default async function Dashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <section className="rounded-2xl border bg-white p-5">
+          <section className="rounded-2xl border bg-card p-5">
             <h2 className="mb-3 font-semibold">{tt("My applications", "मेरे आवेदन")}</h2>
             {apps.length === 0 ? (
               <div className="rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground">
@@ -88,7 +88,7 @@ export default async function Dashboard() {
             )}
           </section>
 
-          <section className="rounded-2xl border border-saffron/40 bg-gradient-to-br from-saffron/10 to-white p-5">
+          <section className="rounded-2xl border border-saffron/40 bg-gradient-to-br from-saffron/10 to-card p-5">
             <h2 className="flex items-center gap-2 font-semibold">
               <Sparkles className="size-5 text-saffron" /> {tt("Recommended for you", "आपके लिए सुझाव")}
             </h2>
@@ -98,7 +98,7 @@ export default async function Dashboard() {
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               {recs.length === 0 && <p className="text-sm text-muted-foreground">{tt("No new recommendations right now.", "अभी कोई नया सुझाव नहीं।")}</p>}
               {recs.map((s) => (
-                <Link key={s.slug} href={`/services/${s.slug}`} className="rounded-xl border bg-white p-3 transition hover:border-primary">
+                <Link key={s.slug} href={`/services/${s.slug}`} className="rounded-xl border bg-card p-3 transition hover:border-primary">
                   <div className="font-medium">{t(s.name)}</div>
                   <ul className="mt-1 space-y-0.5 text-xs text-muted-foreground">
                     {checkEligibility(s, citizen).reasons.map((r, i) => (
@@ -113,7 +113,7 @@ export default async function Dashboard() {
           </section>
         </div>
 
-        <aside className="rounded-2xl border bg-white p-5 lg:self-start">
+        <aside className="rounded-2xl border bg-card p-5 lg:self-start">
           <h2 className="mb-3 flex items-center gap-2 font-semibold">
             <Bell className="size-4" /> {tt("Notifications", "सूचनाएं")}
             {unread > 0 && <span className="rounded-full bg-destructive px-1.5 text-xs text-white">{unread}</span>}

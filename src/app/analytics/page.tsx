@@ -51,7 +51,7 @@ export default async function AnalyticsPage() {
       <AiBriefing summary={summary} />
 
       <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <section className="rounded-2xl border bg-white p-5 lg:col-span-2">
+        <section className="rounded-2xl border bg-card p-5 lg:col-span-2">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="font-semibold">{tt("Daily applications & 14-day forecast", "दैनिक आवेदन और 14-दिवसीय पूर्वानुमान")}</h2>
             <span className="text-xs text-muted-foreground">
@@ -66,7 +66,7 @@ export default async function AnalyticsPage() {
           <TrendChart data={a.trend} />
         </section>
 
-        <section className="rounded-2xl border bg-white p-5">
+        <section className="rounded-2xl border bg-card p-5">
           <h2 className="flex items-center gap-2 font-semibold">
             <AlertTriangle className="size-4 text-destructive" /> {tt("Predicted SLA breaches · next 7 days", "अनुमानित उल्लंघन · अगले 7 दिन")}
           </h2>
@@ -87,7 +87,7 @@ export default async function AnalyticsPage() {
           </table>
         </section>
 
-        <section className="rounded-2xl border bg-white p-5 lg:col-span-2">
+        <section className="rounded-2xl border bg-card p-5 lg:col-span-2">
           <h2 className="font-semibold">{tt("SLA breach rate by district", "जिलेवार समय-सीमा उल्लंघन दर")}</h2>
           <p className="text-xs text-muted-foreground">
             {tt(`Red = above the state average of ${stateBreach}% — structural bottlenecks to fix.`, `लाल = राज्य औसत ${stateBreach}% से अधिक — सुधार योग्य अड़चनें।`)}
@@ -95,12 +95,12 @@ export default async function AnalyticsPage() {
           <HBar data={a.byDistrict.map((d) => ({ label: d.district, value: d.breach_rate }))} unit="%" highlightAbove={stateBreach} />
         </section>
 
-        <section className="rounded-2xl border bg-white p-5">
+        <section className="rounded-2xl border bg-card p-5">
           <h2 className="font-semibold">{tt("Demand by service", "सेवावार मांग")}</h2>
           <HBar data={a.byService} />
         </section>
 
-        <section className="rounded-2xl border bg-white p-5 lg:col-span-2">
+        <section className="rounded-2xl border bg-card p-5 lg:col-span-2">
           <h2 className="font-semibold">{tt("Grievances by category", "श्रेणीवार शिकायतें")}</h2>
           <p className="text-xs text-muted-foreground">
             {a.griev.resolved} {tt("resolved", "निवारित")} · {tt("avg", "औसत")} {a.griev.avg_res_days} {tt("days to resolve", "दिन में निवारण")}
@@ -108,7 +108,7 @@ export default async function AnalyticsPage() {
           <HBar data={a.grievCat.map((g) => ({ label: g.category, value: g.n }))} />
         </section>
 
-        <section className="rounded-2xl border bg-white p-5">
+        <section className="rounded-2xl border bg-card p-5">
           <h2 className="flex items-center gap-2 font-semibold">
             <MapPin className="size-4 text-primary" /> {tt("Grievance hotspots · 30 days", "शिकायत हॉटस्पॉट · 30 दिन")}
           </h2>
@@ -119,7 +119,7 @@ export default async function AnalyticsPage() {
                 <span>
                   <b>{h.category}</b> <span className="text-muted-foreground">· {h.district}</span>
                 </span>
-                <span className="rounded-full bg-white px-2 text-xs font-semibold ring-1 ring-border">{h.n}</span>
+                <span className="rounded-full bg-card px-2 text-xs font-semibold ring-1 ring-border">{h.n}</span>
               </li>
             ))}
           </ul>
@@ -131,7 +131,7 @@ export default async function AnalyticsPage() {
 
 function Tile({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-2xl border bg-white p-4">
+    <div className="rounded-2xl border bg-card p-4">
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
         {icon} {label}
       </div>

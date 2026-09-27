@@ -64,7 +64,7 @@ export function AssistantChat({ initialQuery, loggedIn }: { initialQuery?: strin
   }, [msgs, busy]);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col rounded-2xl border bg-white shadow-sm">
+    <div className="flex min-h-0 flex-1 flex-col rounded-2xl border bg-card shadow-sm">
       <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
         {msgs.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
@@ -87,7 +87,7 @@ export function AssistantChat({ initialQuery, loggedIn }: { initialQuery?: strin
         {msgs.map((m, i) =>
           m.role === "user" ? (
             <div key={i} className="flex justify-end">
-              <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-2 text-sm text-white">{m.content}</div>
+              <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-2 text-sm text-primary-foreground">{m.content}</div>
             </div>
           ) : (
             <div key={i} className="flex gap-2">
@@ -105,7 +105,7 @@ export function AssistantChat({ initialQuery, loggedIn }: { initialQuery?: strin
                   </div>
                 </div>
                 {m.data.services.map((s) => (
-                  <div key={s.slug} className="rounded-xl border bg-white p-3">
+                  <div key={s.slug} className="rounded-xl border bg-card p-3">
                     <div className="flex items-start justify-between gap-2">
                       <div className="font-semibold">{t(s.name)}</div>
                       {s.eligibility && (
@@ -194,7 +194,7 @@ export function AssistantChat({ initialQuery, loggedIn }: { initialQuery?: strin
             onClick={listening ? stop : start}
             aria-label={tt("Speak", "बोलें")}
             className={`grid size-11 shrink-0 place-items-center rounded-xl transition ${
-              listening ? "animate-pulse bg-destructive text-white" : "bg-saffron/15 text-[oklch(0.55_0.15_55)] hover:bg-saffron/25"
+              listening ? "animate-pulse bg-destructive text-white" : "bg-saffron/15 text-saffron-ink hover:bg-saffron/25"
             }`}
           >
             <Mic className="size-5" />
@@ -206,7 +206,7 @@ export function AssistantChat({ initialQuery, loggedIn }: { initialQuery?: strin
           placeholder={tt("Type your question…", "अपना प्रश्न लिखें…")}
           className="min-w-0 flex-1 rounded-xl border bg-muted/40 px-3 py-2.5 text-sm outline-none focus:border-primary"
         />
-        <button type="submit" disabled={busy} className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-white disabled:opacity-50">
+        <button type="submit" disabled={busy} className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground disabled:opacity-50">
           <SendHorizonal className="size-5" />
         </button>
       </form>

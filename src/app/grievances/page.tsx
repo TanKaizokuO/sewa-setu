@@ -10,7 +10,7 @@ const PRIORITY_ORDER = sql`case priority when 'critical' then 0 when 'high' then
 const PRIORITY_CLS: Record<string, string> = {
   critical: "bg-destructive text-white",
   high: "bg-destructive/15 text-destructive",
-  medium: "bg-warning/20 text-[oklch(0.5_0.13_60)]",
+  medium: "bg-warning/20 text-warning-ink",
   low: "bg-muted text-muted-foreground",
 };
 
@@ -23,7 +23,7 @@ export default async function GrievanceInbox() {
       <LiveRefresh value={String(rows[0]?.id ?? 0)} interval={5000} />
       <h1 className="text-2xl font-bold">{tt("Grievance inbox", "शिकायत इनबॉक्स")}</h1>
       <p className="text-sm text-muted-foreground">{tt("AI-triaged: categorised, prioritised and routed. Highest priority first.", "एआई द्वारा वर्गीकृत, प्राथमिकता तय व अग्रेषित। सबसे ज़रूरी पहले।")}</p>
-      <div className="mt-5 overflow-x-auto rounded-2xl border bg-white">
+      <div className="mt-5 overflow-x-auto rounded-2xl border bg-card">
         <table className="w-full min-w-[820px] text-sm">
           <thead className="border-b bg-muted/40 text-left text-xs text-muted-foreground">
             <tr>
@@ -40,7 +40,7 @@ export default async function GrievanceInbox() {
               <tr key={g.id} className={!g.isSeed ? "bg-primary/[0.03]" : ""}>
                 <td className="px-4 py-3"><span className={`rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${PRIORITY_CLS[g.priority]}`}>{g.priority}</span></td>
                 <td className="px-4 py-3">
-                  <div className="font-medium">{g.summaryEn} {!g.isSeed && <span className="ml-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-white">NEW</span>}</div>
+                  <div className="font-medium">{g.summaryEn} {!g.isSeed && <span className="ml-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">NEW</span>}</div>
                   <div className="text-xs text-muted-foreground">“{g.text.slice(0, 90)}” · <span className="font-mono">{g.refNo}</span></div>
                   {g.aiReason && <div className="text-[11px] text-muted-foreground">AI: {g.aiReason}</div>}
                 </td>

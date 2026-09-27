@@ -5,6 +5,7 @@ import { db, notifications } from "@/db";
 import { currentCitizen, currentOfficer } from "@/lib/session";
 import { getT } from "@/lib/i18n";
 import { LangToggle } from "./lang-toggle";
+import { ThemeToggle } from "./theme-toggle";
 import { LogoutButton } from "./logout-button";
 import { buttonVariants } from "@/components/ui/button";
 import { Logo } from "./logo";
@@ -37,7 +38,7 @@ export async function SiteHeader() {
       ];
 
   return (
-    <header className="sticky top-0 z-40 border-b print:hidden bg-white/85 backdrop-blur supports-backdrop-filter:bg-white/70">
+    <header className="sticky top-0 z-40 border-b print:hidden bg-card/85 backdrop-blur supports-backdrop-filter:bg-card/70">
       <div className="h-1 bg-gradient-to-r from-saffron via-white to-success" />
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-3 sm:gap-4 sm:px-4">
         <Link href={officer ? (officer.role === "admin" ? "/analytics" : "/officer") : "/"} className="shrink-0">
@@ -52,6 +53,7 @@ export async function SiteHeader() {
         </nav>
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
           <LangToggle />
+          <ThemeToggle />
           {citizen && (
             <Link href="/dashboard" className="relative rounded-full p-2 hover:bg-muted" aria-label="Notifications">
               <Bell className="size-5" />

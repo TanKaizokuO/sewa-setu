@@ -41,7 +41,7 @@ export default async function CertificatePage({ params }: PageProps<"/certificat
       <div className="mb-4 flex justify-end gap-2 print:hidden">
         <PrintButton />
       </div>
-      <div className="relative overflow-hidden rounded-xl border-4 border-double border-primary/60 bg-white p-8 shadow-sm print:shadow-none">
+      <div className="relative overflow-hidden rounded-xl border-4 border-double border-primary/60 bg-card p-8 text-foreground light shadow-sm print:shadow-none">
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-7xl font-black tracking-widest text-primary/[0.04] -rotate-12">
           SEWA SETU
         </div>

@@ -122,8 +122,8 @@ export function ApplyWizard({
       </ol>
 
       {step === 0 && (
-        <section className="space-y-4 rounded-2xl border bg-white p-5">
-          <p className="flex items-center gap-2 rounded-lg bg-success/10 px-3 py-2 text-sm text-[oklch(0.42_0.12_150)]">
+        <section className="space-y-4 rounded-2xl border bg-card p-5">
+          <p className="flex items-center gap-2 rounded-lg bg-success/10 px-3 py-2 text-sm text-success-ink">
             <ShieldCheck className="size-4 shrink-0" />
             {tt("We filled this from your DigiLocker profile. Please check and complete the rest.", "यह फॉर्म आपकी डिजिलॉकर प्रोफ़ाइल से भरा गया है। कृपया जांचें और बाकी भरें।")}
           </p>
@@ -152,7 +152,7 @@ export function ApplyWizard({
             const st = docs[req.type];
             const inLocker = digilocker.includes(req.type);
             return (
-              <div key={req.type} className="rounded-2xl border bg-white p-4">
+              <div key={req.type} className="rounded-2xl border bg-card p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <div className="font-semibold">
@@ -245,7 +245,7 @@ export function ApplyWizard({
         <section className="space-y-4">
           <div className={`rounded-2xl border p-4 ${issues.length ? "border-warning bg-warning/10" : "border-success/40 bg-success/10"}`}>
             <div className="flex items-center gap-2 font-semibold">
-              {issues.length ? <AlertTriangle className="size-5 text-[oklch(0.6_0.15_65)]" /> : <FileCheck2 className="size-5 text-success" />}
+              {issues.length ? <AlertTriangle className="size-5 text-warning-ink" /> : <FileCheck2 className="size-5 text-success" />}
               {issues.length
                 ? tt(`AI pre-check: ${issues.length} item(s) need attention`, `एआई पूर्व-जांच: ${issues.length} बिंदु पर ध्यान दें`)
                 : tt("AI pre-check: all documents match your form", "एआई पूर्व-जांच: सभी दस्तावेज़ आपके फॉर्म से मेल खाते हैं")}
@@ -268,14 +268,14 @@ export function ApplyWizard({
                   onChange={(e) => setNote(e.target.value)}
                   rows={2}
                   placeholder={tt("e.g. My surname changed after marriage; marriage certificate attached at Lok Sewa Kendra.", "जैसे: विवाह के बाद मेरा उपनाम बदला है।")}
-                  className="mt-1 w-full rounded-lg border bg-white p-2 text-sm"
+                  className="mt-1 w-full rounded-lg border bg-card p-2 text-sm"
                 />
               </>
             )}
           </div>
 
           {minor.length > 0 && (
-            <div className="rounded-2xl border bg-white p-4 text-sm">
+            <div className="rounded-2xl border bg-card p-4 text-sm">
               <div className="font-medium">{tt("Minor differences — the officer will confirm", "छोटे अंतर — अधिकारी पुष्टि करेंगे")}</div>
               <ul className="mt-1 space-y-0.5 text-xs text-muted-foreground">
                 {minor.map((c, i) => (
@@ -285,7 +285,7 @@ export function ApplyWizard({
             </div>
           )}
 
-          <div className="rounded-2xl border bg-white p-4">
+          <div className="rounded-2xl border bg-card p-4">
             <div className="mb-2 font-semibold">{tt("Your details", "आपका विवरण")}</div>
             <dl className="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
               {service.fields.map((f) => (
@@ -297,7 +297,7 @@ export function ApplyWizard({
             </dl>
           </div>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-2xl border bg-white p-4 text-sm">
+          <label className="flex cursor-pointer items-start gap-3 rounded-2xl border bg-card p-4 text-sm">
             <input type="checkbox" checked={declaration} onChange={(e) => setDeclaration(e.target.checked)} className="mt-1 size-4" />
             <span>
               <b>{tt("Digital self-declaration", "डिजिटल स्व-घोषणा")}</b> —{" "}
@@ -308,7 +308,7 @@ export function ApplyWizard({
             </span>
           </label>
 
-          <div className="flex items-center justify-between rounded-2xl border bg-white p-4 text-sm">
+          <div className="flex items-center justify-between rounded-2xl border bg-card p-4 text-sm">
             <span>{tt("Service fee", "सेवा शुल्क")}</span>
             <span className="font-semibold">₹{service.fee} <span className="text-xs font-normal text-muted-foreground">({tt("UPI — demo, not charged", "यूपीआई — डेमो, शुल्क नहीं लिया जाएगा")})</span></span>
           </div>
@@ -329,13 +329,13 @@ export function ApplyWizard({
 
 function Field({ f, value, onChange, fromDigiLocker }: { f: FieldDef; value: string; onChange: (v: string) => void; fromDigiLocker: boolean }) {
   const { t, tt } = useLang();
-  const cls = "w-full rounded-lg border bg-white px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15";
+  const cls = "w-full rounded-lg border bg-card px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15";
   return (
     <label className={`block ${f.type === "textarea" ? "sm:col-span-2" : ""}`}>
       <span className="mb-1 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
         {t(f.label)} {f.required && <span className="text-destructive">*</span>}
         {fromDigiLocker && (
-          <span className="flex items-center gap-0.5 rounded bg-success/15 px-1 text-[10px] text-[oklch(0.42_0.12_150)]">
+          <span className="flex items-center gap-0.5 rounded bg-success/15 px-1 text-[10px] text-success-ink">
             <ShieldCheck className="size-2.5" /> DigiLocker
           </span>
         )}

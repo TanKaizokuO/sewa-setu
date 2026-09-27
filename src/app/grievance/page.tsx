@@ -21,7 +21,7 @@ export default async function GrievancePage({ searchParams }: PageProps<"/grieva
       </p>
       <GrievanceForm initialText={typeof text === "string" ? text : ""} loggedIn={!!citizen} />
       {mine.length > 0 && (
-        <section className="mt-6 rounded-2xl border bg-white p-5">
+        <section className="mt-6 rounded-2xl border bg-card p-5">
           <h2 className="mb-2 font-semibold">{tt("My grievances", "मेरी शिकायतें")}</h2>
           <ul className="divide-y text-sm">
             {mine.map((g) => (
