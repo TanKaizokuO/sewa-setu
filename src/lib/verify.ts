@@ -57,10 +57,12 @@ export async function verifyDocument(input: {
       ms: Date.now() - t0,
       cached: false,
     };
-    await db
-      .insert(ocrCache)
-      .values({ sha256: cacheKey(input), result })
-      .onConflictDoUpdate({ target: ocrCache.sha256, set: { result, createdAt: new Date() } });
+    // Only cloud results are cached, so an on-device fallback never replaces a better reading
+    if (!input.clientOcrText)
+      await db
+        .insert(ocrCache)
+        .values({ sha256: cacheKey(input), result })
+        .onConflictDoUpdate({ target: ocrCache.sha256, set: { result, createdAt: new Date() } });
     return result;
   } catch (err) {
     console.error("[verify] live pipeline failed:", (err as Error).message);

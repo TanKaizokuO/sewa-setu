@@ -113,7 +113,7 @@ const GRIEVANCE_TEMPLATES = [
 const DAY = 86400000;
 
 export async function runSeed(db: DB) {
-  await db.execute(sql`TRUNCATE notifications, events, documents, applications, grievances, officers, citizens, ocr_cache RESTART IDENTITY CASCADE`);
+  await db.execute(sql`TRUNCATE notifications, events, documents, applications, grievances, officers, citizens RESTART IDENTITY CASCADE`);
 
   await db.insert(schema.citizens).values(Object.values(PERSONAS).map((p) => ({ ...p, digilocker: [...p.digilocker] })));
   await db.insert(schema.officers).values([...OFFICERS]);
