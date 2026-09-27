@@ -85,10 +85,11 @@ async function bestOcr(image: string): Promise<OcrBlock[]> {
   const ok = reads.flatMap((r) => (r.status === "fulfilled" ? [r.value.filter((b) => !isUnknown(b.text))] : []));
   if (!ok.length) throw (reads[0] as PromiseRejectedResult).reason;
   const words = ok.map((blocks) => new Set(blocks.flatMap((b) => b.text.toLowerCase().match(/[\p{L}\p{M}\p{N}]{2,}/gu) ?? [])));
-  // A word another read also saw counts fully; an unconfirmed word (maybe real, maybe garbled) counts a quarter
+  // A word another read also saw counts fully; an unconfirmed word (maybe real, maybe garbled) counts a
+  // quarter, capped so a long hallucinated read (it happens) can't outscore a confirmed one
   const score = (i: number) => {
     const confirmed = [...words[i]].filter((w) => words.some((other, j) => j !== i && other.has(w))).length;
-    return confirmed + 0.25 * (words[i].size - confirmed);
+    return ok.length === 1 ? 1 : confirmed + 0.25 * Math.min(words[i].size - confirmed, confirmed);
   };
   let best = 0;
   for (let i = 1; i < ok.length; i++) if (score(i) > score(best)) best = i;
