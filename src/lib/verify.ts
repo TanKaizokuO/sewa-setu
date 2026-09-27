@@ -192,12 +192,13 @@ CHECKS: ${JSON.stringify(toCheck)}`,
 }
 
 /** Nemotron-Parse emits markdown/LaTeX; keep just the words. */
-function cleanOcr(s: string) {
+export function cleanOcr(s: string) {
   return s
     .replace(/<\/?u>|\*\*/g, "")
     .replace(/\\(begin|end)\{tabular\}(\{[^}]*\})?/g, "")
+    .replace(/\\hline/g, "")
     .replace(/\s*&\s*/g, " | ")
-    .replace(/\\\\/g, "")
+    .replace(/\s*\\\\\s*/g, "\n") // LaTeX row break -> one table row per line
     .trim();
 }
 

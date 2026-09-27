@@ -132,8 +132,30 @@ export async function draftOfficerNote(applicationId: number) {
       detail: { model: res.model, ms: res.ms },
     });
   } catch (e) {
+    // LLM unavailable: write a rule-based note from the same evidence so the officer is never left waiting
     console.error("[draftOfficerNote]", (e as Error).message);
+    await db.update(applications).set({ aiNote: templateNote(evidence) }).where(eq(applications.id, applicationId));
+    await addEvent(applicationId, {
+      kind: "ai_decision",
+      actor: "ai",
+      actorName: "Sewa Setu AI",
+      message: { en: "Verification note generated from AI checks (LLM unavailable)", hi: "एआई जांच से सत्यापन नोट बनाया गया (एलएलएम अनुपलब्ध)" },
+      detail: { model: "rule-template" },
+    });
   }
+}
+
+const STATUS_HI: Record<string, string> = { match: "मेल खाता है", partial: "आंशिक मेल", mismatch: "मेल नहीं खाता", missing: "दस्तावेज़ में नहीं मिला" };
+
+function templateNote(evidence: { document: string; checks: { field: string; status: string; reason: string }[] }[]) {
+  const lines = evidence.flatMap((d) => d.checks.map((c) => `- ${d.document} · ${c.field}: ${STATUS_HI[c.status] ?? c.status}`));
+  const problems = evidence.flatMap((d) => d.checks.filter((c) => c.status === "mismatch" || c.status === "missing"));
+  lines.push(
+    problems.length
+      ? `- अनुशंसा: ${problems.length} विसंगति(यों) का क्षेत्र सत्यापन करें; आवश्यक हो तो आवेदक से सुधार मांगें।`
+      : "- अनुशंसा: सभी जांचे गए विवरण मेल खाते हैं; क्षेत्र सत्यापन के बाद आगे भेजा जा सकता है।",
+  );
+  return lines.join("\n");
 }
 
 export type OfficerAction = "forward" | "correction" | "reject" | "approve" | "send_back";

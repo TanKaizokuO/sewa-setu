@@ -41,7 +41,7 @@ Use the role switcher (bottom-right) to jump between personas. **Reset demo** re
 3. **Switch to Sunita**, apply for an income certificate → Aadhaar says *Sunita Markam*, form says *Sunita Dhruw* → **Mismatch** with the reason and a suggested fix, before submission.
 4. **Switch to Patwari**: Ramesh's application is in the risk-sorted queue with the AI-drafted Hindi note, evidence and override buttons → Forward. **Switch to Tehsildar** → Approve → certificate with QR code.
 5. **Switch back to Ramesh**: the tracking page has updated live, with the certificate link and recommendations for other schemes.
-6. **Grievance**: "जगदलपुर में 2 हफ्ते से पानी नहीं आ रहा" → *Water Supply · Public Health Engineering · critical*, with a reason, and grouped with the similar Jagdalpur complaints as a hotspot.
+6. **Grievance**: "जगदलपुर में 2 हफ्ते से पानी नहीं आ रहा" → *Water Supply · Public Health Engineering*, a priority with its reason, and grouped with the similar Jagdalpur complaints as a hotspot.
 7. **Switch to Admin → Analytics**: forecast, Surguja and Bastar breaching SLA at ~3× the state average, predicted breaches, and the AI briefing.
 
 Personas: **Ramesh Kumar Sahu** (OBC farmer, Kurud, Dhamtari), **Priya Verma** (SC student, Raipur — caste certificate flow), **Sunita Dhruw** (ST homemaker, Nagri — the name-mismatch case).
@@ -91,7 +91,8 @@ flowchart LR
 
 ### Reliability (why the demo doesn't break)
 
-- Every AI call has a timeout and a fallback model (`nemotron-3-super-120b` → `gpt-oss-20b`).
+- Every AI call has a timeout, one retry when the hosted API is overloaded, and a fallback model (`nemotron-3-super-120b` → `gpt-oss-20b`).
+- If the LLM is unavailable, the officer still gets a rule-based verification note built from the same checks.
 - If cloud OCR is unreachable, the browser runs **Tesseract.js (Hindi + English) on-device** and the server verifies that text.
 - Real results are cached by image hash; if the live pipeline fails, the cached **real** result is served with a visible "cached" badge.
 - Sahayak falls back to keyword search over the catalog if the LLM is down.

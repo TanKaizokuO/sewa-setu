@@ -13,7 +13,18 @@ type Msg = { role: "system" | "user" | "assistant"; content: string };
 
 export type ChatResult = { content: string; model: string; ms: number };
 
+/** One retry on transient overload (429/502/503), which the hosted NIM API returns under load. */
 async function nim(body: Record<string, unknown>, timeoutMs: number) {
+  try {
+    return await nimOnce(body, timeoutMs);
+  } catch (e) {
+    if (!/^NIM (429|502|503)/.test((e as Error).message)) throw e;
+    await new Promise((r) => setTimeout(r, 1200));
+    return nimOnce(body, timeoutMs);
+  }
+}
+
+async function nimOnce(body: Record<string, unknown>, timeoutMs: number) {
   const key = process.env.NVIDIA_API_KEY;
   if (!key) throw new Error("NVIDIA_API_KEY missing");
   const ctrl = new AbortController();
@@ -75,18 +86,35 @@ function stripThink(s: string) {
   return s.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
 }
 
+/** Models sometimes put raw newlines/tabs inside JSON strings; escape them so JSON.parse accepts it. */
+function escapeControlChars(s: string) {
+  let out = "";
+  let inStr = false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inStr && c === "\\") {
+      out += c + (s[++i] ?? "");
+      continue;
+    }
+    if (c === '"') inStr = !inStr;
+    if (inStr && c < " ") out += c === "\n" ? "\\n" : c === "\t" ? "\\t" : c === "\r" ? "\\r" : " ";
+    else out += c;
+  }
+  return out;
+}
+
 export function extractJson<T>(s: string): T {
   const cleaned = s.replace(/```(?:json)?/g, "").trim();
-  try {
-    return JSON.parse(cleaned);
-  } catch {
-    const start = cleaned.search(/[[{]/);
-    const open = cleaned[start];
-    const close = open === "{" ? "}" : "]";
-    const end = cleaned.lastIndexOf(close);
-    if (start >= 0 && end > start) return JSON.parse(cleaned.slice(start, end + 1));
-    throw new Error("No JSON in model output");
-  }
+  const start = cleaned.search(/[[{]/);
+  const end = cleaned.lastIndexOf(cleaned[start] === "{" ? "}" : "]");
+  const candidates = [cleaned, start >= 0 && end > start ? cleaned.slice(start, end + 1) : ""].filter(Boolean);
+  for (const c of candidates)
+    for (const text of [c, escapeControlChars(c)]) {
+      try {
+        return JSON.parse(text);
+      } catch {}
+    }
+  throw new Error("No JSON in model output");
 }
 
 export type OcrBlock = {
