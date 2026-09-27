@@ -21,7 +21,7 @@ export default async function VerifyPage({ params }: PageProps<"/verify/[no]">) 
             <div className="flex justify-between"><dt className="text-muted-foreground">Type</dt><dd>{s?.name.en}</dd></div>
             <div className="flex justify-between"><dt className="text-muted-foreground">Holder</dt><dd>{app.applicantName}</dd></div>
             <div className="flex justify-between"><dt className="text-muted-foreground">District</dt><dd>{app.district}</dd></div>
-            <div className="flex justify-between"><dt className="text-muted-foreground">Issued</dt><dd>{app.decidedAt?.toLocaleDateString("en-IN")}</dd></div>
+            <div className="flex justify-between"><dt className="text-muted-foreground">Issued</dt><dd>{app.decidedAt?.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</dd></div>
           </dl>
         </>
       ) : (

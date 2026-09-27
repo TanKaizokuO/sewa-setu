@@ -43,6 +43,7 @@ export async function POST(req: Request) {
         sha256: body.sha256,
         quality: body.quality,
         ocrText: result.ocrText,
+        ocrBlocks: result.ocrBlocks,
         ocrEngine: result.ocrEngine,
         extracted: result.extracted,
         checks: result.checks,

@@ -5,7 +5,7 @@ import { Bot, Landmark, UserRound, Settings2, UserCog, FileWarning, Sparkles } f
 import { db, applications, documents, events } from "@/db";
 import { currentOfficer } from "@/lib/session";
 import { getT } from "@/lib/i18n";
-import { getService, type DocType } from "@/lib/services";
+import { getService, DOC_TYPES, type DocType } from "@/lib/services";
 import { slaRisk } from "@/lib/risk";
 import { STATUS_LABEL, STATUS_CLASS } from "@/lib/status";
 import { DocEvidence } from "@/components/doc-evidence";
@@ -26,7 +26,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
   const [docs, trail, [depth]] = await Promise.all([
     db.select().from(documents).where(eq(documents.applicationId, app.id)).orderBy(asc(documents.id)),
     db.select().from(events).where(eq(events.applicationId, app.id)).orderBy(asc(events.createdAt), asc(events.id)),
-    db.select({ n: count() }).from(applications).where(and(eq(applications.status, app.status))),
+    db.select({ n: count() }).from(applications).where(and(eq(applications.status, app.status), eq(applications.district, app.district))),
   ]);
   const desk = officer.role === "patwari" ? "patwari_review" : "tehsildar_review";
   const atMyDesk = app.status === desk;
@@ -92,7 +92,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
             <div className="space-y-5">
               {docs.map((d) => (
                 <div key={d.id}>
-                  <div className="mb-2 text-sm font-medium">{d.docType.replaceAll("_", " ")}</div>
+                  <div className="mb-2 text-sm font-medium">{t(DOC_TYPES[d.docType as DocType]?.label ?? { en: d.docType, hi: d.docType })}</div>
                   <DocEvidence
                     image={d.image}
                     expectedType={d.docType as DocType}
@@ -101,6 +101,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
                       extracted: d.extracted ?? {},
                       checks: d.checks ?? [],
                       ocrEngine: d.ocrEngine ?? "",
+                      ocrBlocks: d.ocrBlocks ?? undefined,
                       cached: d.cached,
                     }}
                     officer={{ documentId: d.id, canOverride: atMyDesk }}
@@ -146,7 +147,7 @@ export default async function OfficerApplication({ params }: PageProps<"/officer
               </span>
               <span className="text-sm capitalize text-muted-foreground">{risk.level}</span>
               <span className="ml-auto text-xs text-muted-foreground">
-                {tt("due", "नियत")} {app.slaDueAt.toLocaleDateString("en-IN")}
+                {tt("due", "नियत")} {app.slaDueAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
               </span>
             </div>
             <ul className="mt-3 space-y-2">

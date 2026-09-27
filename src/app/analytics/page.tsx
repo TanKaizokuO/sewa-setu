@@ -11,7 +11,7 @@ export default async function AnalyticsPage() {
   if (!officer) redirect("/login");
   const { tt } = await getT();
   const a = await getAnalytics();
-  const sla = Math.round((a.kpi.within / Math.max(1, a.kpi.decided)) * 100);
+  const sla = Math.round((a.kpi.within_sla / Math.max(1, a.kpi.decided)) * 100);
   const aiClear = Math.round((a.kpi.ai_clear / Math.max(1, a.kpi.ai_total)) * 100);
   const stateBreach = Math.round(a.byDistrict.reduce((s, d) => s + d.breach_rate * d.total, 0) / Math.max(1, a.byDistrict.reduce((s, d) => s + d.total, 0)));
   const growth = Math.round(((a.next7 - a.prev7) / Math.max(1, a.prev7)) * 100);

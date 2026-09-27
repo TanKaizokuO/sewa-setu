@@ -116,6 +116,7 @@ export const documents = pgTable("documents", {
   sha256: text("sha256").notNull(),
   quality: jsonb("quality").$type<QualityReport>(),
   ocrText: text("ocr_text"),
+  ocrBlocks: jsonb("ocr_blocks").$type<{ text: string; type: string; bbox: { xmin: number; ymin: number; xmax: number; ymax: number } }[]>(),
   ocrEngine: text("ocr_engine"),
   extracted: jsonb("extracted").$type<Record<string, string | null>>(),
   checks: jsonb("checks").$type<VerificationCheck[]>(),

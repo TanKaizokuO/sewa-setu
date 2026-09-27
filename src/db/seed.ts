@@ -156,7 +156,7 @@ export async function runSeed(db: DB) {
       const slow = SLOW[district] ?? 1;
       const procDays = svc.slaDays * (0.35 + rnd() * 0.75) * slow;
       const decided = submittedAt.getTime() + procDays * DAY;
-      const aiScore = Math.round((0.55 + rnd() * 0.45) * 100) / 100;
+      const aiScore = Math.round((rnd() < 0.14 ? 0.5 + rnd() * 0.25 : 0.8 + rnd() * 0.2) * 100) / 100;
       const pending = decided > now;
       const rejected = !pending && rnd() < (aiScore < 0.7 ? 0.35 : 0.04);
       const status: schema.ApplicationStatus = pending ? (rnd() < 0.55 ? "patwari_review" : "tehsildar_review") : rejected ? "rejected" : "approved";
@@ -241,6 +241,25 @@ export async function runSeed(db: DB) {
       resolvedAt: resolved ? new Date(createdAt.getTime() + (1 + rnd() * 9) * DAY) : null,
       isSeed: true,
     });
+  }
+  // Emerging hotspots: clusters of the same complaint in one district over the last ~10 days
+  const clusters: [number, number, number][] = [
+    // [template index, district, count]
+    [0, 0, 7], // Water Supply
+    [1, 1, 5], // Public Distribution
+    [11, 2, 4], // MGNREGA wages
+  ];
+  const clusterDistricts = ["Jagdalpur (Bastar)", "Korba", "Surguja"];
+  for (const [ti, di, n] of clusters) {
+    const t = GRIEVANCE_TEMPLATES[ti];
+    for (let k = 0; k < n; k++) {
+      gr.push({
+        refNo: `GRV-2026-${String(20000 + gr.length)}`,
+        citizenId: null, text: t.text, district: clusterDistricts[di], category: t.category, department: t.department,
+        priority: t.priority, summaryEn: t.summary, sentiment: "distressed", status: k % 3 === 0 ? "in_progress" : "open",
+        createdAt: new Date(now - rnd() * 10 * DAY), isSeed: true,
+      });
+    }
   }
   await db.insert(schema.grievances).values(gr);
 

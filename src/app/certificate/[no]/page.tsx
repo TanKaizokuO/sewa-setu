@@ -68,10 +68,10 @@ export default async function CertificatePage({ params }: PageProps<"/certificat
               <span className="text-muted-foreground">Application:</span> <span className="font-mono">{app.refNo}</span>
             </div>
             <div>
-              <span className="text-muted-foreground">Issued:</span> {issued.toLocaleDateString("en-IN")}
+              <span className="text-muted-foreground">Issued:</span> {issued.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
             </div>
             <div>
-              <span className="text-muted-foreground">Valid till:</span> {s.slug === "income-certificate" ? validTill.toLocaleDateString("en-IN") : "Permanent"}
+              <span className="text-muted-foreground">Valid till:</span> {s.slug === "income-certificate" ? validTill.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "Permanent"}
             </div>
             <div className="mt-4 font-semibold">Digitally signed by: Tehsildar, {app.tehsil}</div>
             <div className="text-xs text-muted-foreground">Signature hash: {Buffer.from(no + app.refNo).toString("base64").slice(0, 24)}…</div>

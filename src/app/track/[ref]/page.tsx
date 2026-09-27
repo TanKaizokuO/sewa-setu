@@ -91,7 +91,7 @@ export default async function TrackPage({ params, searchParams }: PageProps<"/tr
           <div className="mt-4 flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm">
             <CalendarClock className="size-4 text-primary" />
             {daysLeft >= 0
-              ? tt(`Guaranteed by ${app.slaDueAt.toLocaleDateString("en-IN")} — ${daysLeft} day(s) left under the Lok Sewa Guarantee Act`, `लोक सेवा गारंटी अधिनियम के तहत ${app.slaDueAt.toLocaleDateString("en-IN")} तक — ${daysLeft} दिन शेष`)
+              ? tt(`Guaranteed by ${app.slaDueAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })} — ${daysLeft} day(s) left under the Lok Sewa Guarantee Act`, `लोक सेवा गारंटी अधिनियम के तहत ${app.slaDueAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })} तक — ${daysLeft} दिन शेष`)
               : tt(`SLA exceeded by ${-daysLeft} day(s) — escalated automatically`, `समय-सीमा ${-daysLeft} दिन से पार — स्वतः उच्च अधिकारी को भेजा गया`)}
           </div>
         )}

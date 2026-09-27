@@ -89,8 +89,8 @@ export async function submitApplication(input: {
     app.id,
     { en: "Application received", hi: "आवेदन प्राप्त हुआ" },
     {
-      en: `${service.name.en} — ${app.refNo}. Expected by ${app.slaDueAt.toLocaleDateString("en-IN")}.`,
-      hi: `${service.name.hi} — ${app.refNo}। संभावित तिथि ${app.slaDueAt.toLocaleDateString("en-IN")}।`,
+      en: `${service.name.en} — ${app.refNo}. Expected by ${app.slaDueAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}.`,
+      hi: `${service.name.hi} — ${app.refNo}। संभावित तिथि ${app.slaDueAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}।`,
     },
   );
   return app;

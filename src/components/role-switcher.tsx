@@ -42,7 +42,7 @@ export function RoleSwitcher({ current }: { current: Session }) {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 print:hidden">
+    <div className="fixed right-4 bottom-4 z-50 flex flex-col items-end print:hidden">
       {open && (
         <div className="mb-2 w-72 rounded-xl border bg-white p-2 shadow-xl">
           <div className="flex items-center justify-between px-2 py-1">

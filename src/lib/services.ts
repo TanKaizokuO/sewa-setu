@@ -432,6 +432,8 @@ export function checkEligibility(service: Service, p: ProfileLike): EligibilityR
 /** Services the citizen is eligible for (with at least one targeting rule) but hasn't applied to. */
 export function recommendFor(p: ProfileLike, appliedSlugs: string[]) {
   return SERVICES.filter(
-    (s) => s.eligibility.length > 0 && !appliedSlugs.includes(s.slug) && checkEligibility(s, p).eligible,
+    (s) =>
+      // only services targeted at a group (not just an age limit) are worth recommending
+      s.eligibility.some((r) => r.field !== "age") && !appliedSlugs.includes(s.slug) && checkEligibility(s, p).eligible,
   );
 }

@@ -8,11 +8,11 @@ export async function getAnalytics() {
   const q = <T,>(query: ReturnType<typeof sql>) => db.execute(query) as unknown as Promise<T[]>;
 
   const [kpi] = await q<{
-    total: number; decided: number; within: number; avg_days: number; pending: number; ai_clear: number; ai_total: number; approved: number;
+    total: number; decided: number; within_sla: number; avg_days: number; pending: number; ai_clear: number; ai_total: number; approved: number;
   }>(sql`
     select count(*)::int total,
       count(*) filter (where decided_at is not null)::int decided,
-      count(*) filter (where decided_at is not null and decided_at <= sla_due_at)::int within,
+      count(*) filter (where decided_at is not null and decided_at <= sla_due_at)::int within_sla,
       coalesce(round(avg(extract(epoch from decided_at - submitted_at)/86400) filter (where decided_at is not null)::numeric,1),0)::float avg_days,
       count(*) filter (where status in ('patwari_review','tehsildar_review','correction_needed'))::int pending,
       count(*) filter (where ai_summary->>'verdict' = 'clear')::int ai_clear,
@@ -22,7 +22,7 @@ export async function getAnalytics() {
 
   const daily = await q<{ day: string; n: number }>(sql`
     select to_char(d::date, 'YYYY-MM-DD') as day, coalesce(c.n, 0)::int n
-    from generate_series(current_date - interval '89 days', current_date, interval '1 day') d
+    from generate_series(current_date - interval '90 days', current_date - interval '1 day', interval '1 day') d
     left join (select submitted_at::date sd, count(*) n from applications group by 1) c on c.sd = d::date
     order by 1`);
 

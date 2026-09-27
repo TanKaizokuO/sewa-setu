@@ -58,9 +58,9 @@ export function HBar({
       <BarChart data={data} layout="vertical" margin={{ top: 0, right: 36, left: 0, bottom: 0 }} barCategoryGap={6}>
         <CartesianGrid horizontal={false} stroke={GRID} />
         <XAxis type="number" {...axis} hide />
-        <YAxis type="category" dataKey="label" {...axis} width={130} />
+        <YAxis type="category" dataKey="label" {...axis} width={150} />
         <Tooltip content={<Tip unit={unit} />} cursor={{ fill: "oklch(0.95 0.01 255)" }} />
-        <Bar dataKey="value" name="Value" radius={[0, 4, 4, 0]} label={{ position: "right", fill: INK_2, fontSize: 11, formatter: (v: unknown) => `${v}${unit}` }}>
+        <Bar dataKey="value" name="Value" radius={[0, 4, 4, 0]} isAnimationActive={false} label={{ position: "right", fill: INK_2, fontSize: 11, formatter: (v: unknown) => `${v}${unit}` }}>
           {data.map((d) => (
             <Cell key={d.label} fill={highlightAbove != null && d.value > highlightAbove ? "#e34948" : SERIES} />
           ))}
