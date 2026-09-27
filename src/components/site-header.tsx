@@ -37,7 +37,7 @@ export async function SiteHeader() {
       ];
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-white/85 backdrop-blur supports-backdrop-filter:bg-white/70">
+    <header className="sticky top-0 z-40 border-b print:hidden bg-white/85 backdrop-blur supports-backdrop-filter:bg-white/70">
       <div className="h-1 bg-gradient-to-r from-saffron via-white to-success" />
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4">
         <Link href={officer ? (officer.role === "admin" ? "/analytics" : "/officer") : "/"} className="shrink-0">

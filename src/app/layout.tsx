@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <LangProvider lang={lang}>
           <SiteHeader />
           <main className="flex-1">{children}</main>
-          <footer className="border-t bg-white/60 py-6 text-center text-xs text-muted-foreground">
+          <footer className="border-t bg-white/60 py-6 print:hidden text-center text-xs text-muted-foreground">
             Sewa Setu (Prototype) — hackathon demo. Not an official Government of Chhattisgarh website. All people and
             documents shown are fictional.
           </footer>
