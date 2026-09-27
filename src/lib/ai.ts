@@ -59,7 +59,8 @@ export async function chat(
           messages,
           max_tokens: isNemotron ? (opts.maxTokens ?? 800) : Math.max(opts.maxTokens ?? 800, 1500),
           temperature: opts.temperature ?? 0.2,
-          ...(isNemotron ? { chat_template_kwargs: { enable_thinking: false } } : {}),
+          // gpt-oss reasons before answering; low effort keeps the fallback within its timeout
+          ...(isNemotron ? { chat_template_kwargs: { enable_thinking: false } } : { reasoning_effort: "low" }),
         },
         opts.timeoutMs ?? 20000,
       );

@@ -3,7 +3,7 @@ import { currentCitizen } from "@/lib/session";
 import { getService, type DocType } from "@/lib/services";
 import { verifyDocument } from "@/lib/verify";
 
-export const maxDuration = 60;
+export const maxDuration = 90; // 3 parallel OCR reads + primary model + fallback model
 
 export async function POST(req: Request) {
   const citizen = await currentCitizen();
