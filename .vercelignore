@@ -1,9 +1,0 @@
-.env
-.env.*
-!.env.example
-.agents/
-.claude/
-skills-lock.json
-node_modules/
-.next/
-tsconfig.tsbuildinfo

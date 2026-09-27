@@ -42,12 +42,6 @@ next-env.d.ts
 
 # local tooling
 .venv/
-.omp/
-.claude/
 __pycache__/
 Thumbs.db
 !.env.example
-
-# Agent skills installed by marketplace integrations
-.agents/
-skills-lock.json
