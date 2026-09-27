@@ -29,6 +29,7 @@ export const citizens = pgTable("citizens", {
   district: text("district").notNull(),
   category: text("category").notNull(), // GEN | OBC | SC | ST
   occupation: text("occupation").notNull(),
+  maritalStatus: text("marital_status").notNull().default("married"),
   annualIncome: integer("annual_income").notNull(),
   preferredLang: text("preferred_lang").notNull().default("hi"),
   // Documents available in the (mock) DigiLocker account

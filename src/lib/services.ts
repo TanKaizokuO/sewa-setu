@@ -34,7 +34,8 @@ export type Rule =
   | { field: "annualIncome"; op: "<=" | ">="; value: number }
   | { field: "category"; op: "in"; value: string[] }
   | { field: "occupation"; op: "in"; value: string[] }
-  | { field: "gender"; op: "in"; value: string[] };
+  | { field: "gender"; op: "in"; value: string[] }
+  | { field: "maritalStatus"; op: "in"; value: string[] };
 
 export type ProfileLike = {
   name: string;
@@ -48,6 +49,7 @@ export type ProfileLike = {
   district: string;
   category: string;
   occupation: string;
+  maritalStatus: string;
   annualIncome: number;
   phone: string;
 };
@@ -296,7 +298,7 @@ export const SERVICES: Service[] = [
     { en: "Social Welfare", hi: "समाज कल्याण विभाग" },
     { en: "Monthly pension for widows aged 18+ from BPL households.", hi: "बीपीएल परिवारों की 18+ आयु की विधवाओं हेतु मासिक पेंशन।" },
     30, 0, ["widow", "विधवा", "pension", "पेंशन"],
-    [{ field: "gender", op: "in", value: ["female"] }, { field: "age", op: ">=", value: 18 }, { field: "annualIncome", op: "<=", value: 100000 }],
+    [{ field: "gender", op: "in", value: ["female"] }, { field: "maritalStatus", op: "in", value: ["widowed"] }, { field: "age", op: ">=", value: 18 }, { field: "annualIncome", op: "<=", value: 100000 }],
     { en: "Widowed women 18+, BPL household.", hi: "18+ आयु की विधवा महिलाएं, बीपीएल परिवार।" }),
   catalog("kisan-registration", "KSN", { en: "Farmer Registration (Paddy Procurement)", hi: "किसान पंजीयन (धान खरीदी)" },
     { en: "Food, Civil Supplies & Agriculture", hi: "खाद्य, नागरिक आपूर्ति एवं कृषि विभाग" },
@@ -350,7 +352,7 @@ export const SERVICES: Service[] = [
     { en: "Women & Child Development", hi: "महिला एवं बाल विकास विभाग" },
     { en: "Monthly financial assistance for married women aged 21+.", hi: "21+ आयु की विवाहित महिलाओं को मासिक आर्थिक सहायता।" },
     30, 0, ["mahtari", "महतारी", "women", "महिला", "vandan", "वंदन"],
-    [{ field: "gender", op: "in", value: ["female"] }, { field: "age", op: ">=", value: 21 }],
+    [{ field: "gender", op: "in", value: ["female"] }, { field: "maritalStatus", op: "in", value: ["married", "widowed", "divorced"] }, { field: "age", op: ">=", value: 21 }],
     { en: "Married/widowed/divorced women aged 21+ resident in Chhattisgarh.", hi: "छत्तीसगढ़ की 21+ आयु की विवाहित/विधवा/परित्यक्ता महिलाएं।" }, true),
   catalog("trade-licence", "TRD", { en: "Trade Licence", hi: "व्यापार अनुज्ञप्ति" },
     { en: "Urban Administration", hi: "नगरीय प्रशासन विभाग" },
@@ -415,6 +417,10 @@ export function checkEligibility(service: Service, p: ProfileLike): EligibilityR
       case "gender":
         ok = r.value.includes(p.gender);
         reason = { en: `Gender: ${p.gender}`, hi: `लिंग: ${p.gender}` };
+        break;
+      case "maritalStatus":
+        ok = r.value.includes(p.maritalStatus);
+        reason = { en: `Marital status: ${p.maritalStatus}`, hi: `वैवाहिक स्थिति: ${p.maritalStatus}` };
         break;
     }
     if (!ok) eligible = false;

@@ -1,7 +1,8 @@
 import { getT } from "@/lib/i18n";
 import { PersonaLogin } from "./persona-login";
 
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: PageProps<"/login">) {
+  const { next } = await searchParams;
   const { tt } = await getT();
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
@@ -14,7 +15,7 @@ export default async function LoginPage() {
           )}
         </p>
       </div>
-      <PersonaLogin />
+      <PersonaLogin next={typeof next === "string" && next.startsWith("/") ? next : undefined} />
     </div>
   );
 }

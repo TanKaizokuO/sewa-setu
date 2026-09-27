@@ -19,7 +19,7 @@ const OFFICERS = [
   { as: "admin", name: "District Analytics Cell", role: "Collectorate" },
 ];
 
-export function PersonaLogin() {
+export function PersonaLogin({ next }: { next?: string }) {
   const { tt } = useLang();
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export function PersonaLogin() {
   async function go(as: string) {
     setBusy(as);
     const r = await fetch("/api/auth/login", { method: "POST", body: JSON.stringify({ as }) }).then((r) => r.json());
-    router.push(r.home);
+    router.push(next && !["patwari", "tehsildar", "admin"].includes(as) ? next : r.home);
     router.refresh();
   }
 
