@@ -1,14 +1,17 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { sql } from "drizzle-orm";
 import { ArrowRight, FileSearch, ScanText, Workflow, BellRing, MessageSquareWarning, BarChart3, Mic, ShieldCheck } from "lucide-react";
 import { db, applications } from "@/db";
 import { getT } from "@/lib/i18n";
+import { getSession } from "@/lib/session";
 import { SERVICES } from "@/lib/services";
 import { HeroSearch } from "@/components/hero-search";
 import { ServiceCard } from "@/components/service-card";
 import { buttonVariants } from "@/components/ui/button";
 
 export default async function Home() {
+  if (!(await getSession())) redirect("/login");
   const { tt, t } = await getT();
   const [stats] = await db
     .select({

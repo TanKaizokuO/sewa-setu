@@ -41,7 +41,7 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 border-b print:hidden bg-card/85 backdrop-blur supports-backdrop-filter:bg-card/70">
       <div className="h-1 bg-gradient-to-r from-saffron via-white to-success" />
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-3 sm:gap-4 sm:px-4">
-        <Link href={officer ? (officer.role === "admin" ? "/analytics" : "/officer") : "/"} className="shrink-0">
+        <Link href={officer ? (officer.role === "admin" ? "/analytics" : "/officer") : citizen ? "/" : "/login"} className="shrink-0">
           <Logo />
         </Link>
         <nav className="hidden flex-1 items-center gap-1 md:flex">
