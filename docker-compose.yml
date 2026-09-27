@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: sewasetu-db
+    environment:
+      POSTGRES_USER: sewasetu
+      POSTGRES_PASSWORD: sewasetu
+      POSTGRES_DB: sewasetu
+    ports:
+      - "5433:5432"
+    volumes:
+      - sewasetu-pg:/var/lib/postgresql/data
+volumes:
+  sewasetu-pg:
