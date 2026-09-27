@@ -24,19 +24,14 @@ export const metadata: Metadata = {
   description: "AI-powered next-generation Sewa Setu for Chhattisgarh: discover, apply, verify and track government services.",
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#1f4fa3" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f1420" },
-  ],
-};
+export const viewport: Viewport = { themeColor: "#1f4fa3" };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [lang, session] = await Promise.all([getLang(), getSession()]);
   return (
     <html lang={lang} className={`${inter.variable} ${deva.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <LangProvider lang={lang}>
             <SiteHeader />
             <main className="flex-1">{children}</main>
