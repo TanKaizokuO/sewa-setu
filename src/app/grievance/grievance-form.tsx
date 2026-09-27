@@ -59,7 +59,7 @@ export function GrievanceForm({ initialText, loggedIn }: { initialText: string; 
             label={tt("Priority", "प्राथमिकता")}
             value={<span className={`rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${PRIORITY_CLS[res.priority]}`}>{res.priority}</span>}
           />
-          <Info icon={<Clock className="size-4" />} label={tt("Resolution target", "निवारण लक्ष्य")} value={`${res.slaDays} ${tt("days", "दिन")}`} />
+          <Info icon={<Clock className="size-4" />} label={tt("Resolution target", "निवारण लक्ष्य")} value={`${res.slaDays} ${res.slaDays === 1 ? tt("day", "दिन") : tt("days", "दिन")}`} />
         </div>
         <p className="text-xs text-muted-foreground">
           <b>{tt("Why this priority", "यह प्राथमिकता क्यों")}:</b> {res.reason} <span className="opacity-70">· {res.model.split("/").pop()}</span>

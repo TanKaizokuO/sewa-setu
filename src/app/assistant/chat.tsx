@@ -59,7 +59,9 @@ export function AssistantChat({ initialQuery, loggedIn }: { initialQuery?: strin
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
 
-  useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [msgs, busy]);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [msgs, busy]);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col rounded-2xl border bg-white shadow-sm">

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const { text, district: d } = (await req.json()) as { text: string; district?: string };
   if (!text?.trim()) return Response.json({ error: "Please describe the problem" }, { status: 400 });
   const citizen = await currentCitizen();
-  const district = citizen?.district ?? (d && CG_DISTRICTS.includes(d) ? d : "Raipur");
+  let district = citizen?.district ?? (d && CG_DISTRICTS.includes(d) ? d : "Raipur");
 
   let ai: {
     category: string;
@@ -21,6 +21,7 @@ export async function POST(req: Request) {
     reason: string;
     reply_hi: string;
     reply_en: string;
+    district?: string | null;
   };
   let model = "keyword-fallback";
   try {
@@ -31,7 +32,8 @@ export async function POST(req: Request) {
           content: `You triage citizen grievances for the Government of Chhattisgarh. Input may be Hindi, Chhattisgarhi or English.
 Choose category from exactly: ${Object.keys(CATEGORIES).join(", ")}.
 Priority: "critical" = risk to life/health or safety (no drinking water for a village, medical emergency, electrocution risk); "high" = essential service denied for days (ration, pension, wages, water); "medium" = inconvenience with workaround; "low" = minor/informational.
-Return ONLY JSON: {"category","priority","summary_en" (one line, English),"sentiment" (calm|frustrated|distressed),"reason" (one short English sentence explaining the priority),"reply_hi" (one empathetic Hindi sentence to the citizen),"reply_en" (same in English)}`,
+If the text names a place in one of these districts, set "district" to it (else null): ${CG_DISTRICTS.join(", ")}. Villages: Kurud, Sihawa, Nagri are in Dhamtari.
+Return ONLY JSON: {"district","category","priority","summary_en" (one line, English),"sentiment" (calm|frustrated|distressed),"reason" (one short English sentence explaining the priority),"reply_hi" (one empathetic Hindi sentence to the citizen),"reply_en" (same in English)}`,
         },
         { role: "user", content: text.slice(0, 2000) },
       ],
@@ -41,6 +43,7 @@ Return ONLY JSON: {"category","priority","summary_en" (one line, English),"senti
     model = r.model;
     if (!(ai.category in CATEGORIES)) ai.category = "Other";
     if (!(ai.priority in SLA_DAYS)) ai.priority = "medium";
+    if (ai.district && CG_DISTRICTS.includes(ai.district)) district = ai.district;
   } catch {
     ai = { category: "Other", priority: "medium", summary_en: text.slice(0, 120), sentiment: "frustrated", reason: "AI unavailable; routed to the district grievance cell for manual triage.", reply_hi: "आपकी शिकायत दर्ज कर ली गई है।", reply_en: "Your complaint has been registered." };
   }

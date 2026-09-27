@@ -62,7 +62,11 @@ export async function POST(req: Request) {
       village: citizen.village,
       district: citizen.district,
     })}
-Their applications: ${apps.length ? JSON.stringify(apps) : "none yet"}`;
+Their applications: ${apps.length ? JSON.stringify(apps) : "none yet"}
+Rule-engine eligibility for this citizen (AUTHORITATIVE — never contradict it):
+- eligible: ${SERVICES.filter((s) => s.eligibility.length && checkEligibility(s, citizen).eligible).map((s) => s.slug).join(", ") || "none"}
+- NOT eligible: ${SERVICES.filter((s) => s.eligibility.length && !checkEligibility(s, citizen).eligible).map((s) => s.slug).join(", ") || "none"}
+Only suggest schemes from the eligible list when asked what they qualify for.`;
   }
 
   const system = `You are "Sewa Sahayak", the friendly AI assistant of Sewa Setu — the Chhattisgarh government's citizen services portal.
