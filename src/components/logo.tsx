@@ -10,9 +10,9 @@ export function Logo({ light = false }: { light?: boolean }) {
       </svg>
       <span className="leading-none">
         <span className={`block text-[15px] font-bold tracking-tight ${light ? "text-white" : "text-primary"}`}>
-          Sewa Setu <span className="font-semibold">· सेवा सेतु</span>
+          Sewa Setu <span className="hidden font-semibold sm:inline">· सेवा सेतु</span>
         </span>
-        <span className={`block text-[10px] font-medium uppercase tracking-wider ${light ? "text-white/70" : "text-muted-foreground"}`}>
+        <span className={`hidden text-[10px] font-medium uppercase tracking-wider sm:block ${light ? "text-white/70" : "text-muted-foreground"}`}>
           AI citizen services · prototype
         </span>
       </span>

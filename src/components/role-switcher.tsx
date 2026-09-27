@@ -44,7 +44,7 @@ export function RoleSwitcher({ current }: { current: Session }) {
   return (
     <div className="fixed right-4 bottom-4 z-50 flex flex-col items-end print:hidden">
       {open && (
-        <div className="mb-2 w-72 rounded-xl border bg-white p-2 shadow-xl">
+        <div className="mb-2 w-72 max-w-[calc(100vw-2rem)] rounded-xl border bg-white p-2 shadow-xl">
           <div className="flex items-center justify-between px-2 py-1">
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Demo · switch role</span>
             <button onClick={() => setOpen(false)} aria-label="Close" className="rounded p-1 hover:bg-muted">
@@ -80,10 +80,12 @@ export function RoleSwitcher({ current }: { current: Session }) {
       )}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 rounded-full border bg-white/95 px-3 py-2 text-xs font-medium shadow-lg hover:bg-white"
+        className="flex items-center gap-2 rounded-full border bg-white/95 p-2.5 text-xs font-medium shadow-lg hover:bg-white sm:px-3 sm:py-2"
       >
         <Repeat2 className="size-4 text-primary" />
-        Demo: {current ? ROLES.find((r) => r.as === roleKey(current))?.label.split(" —")[0] ?? current.role : "guest"}
+        <span className="hidden sm:inline">
+          Demo: {current ? ROLES.find((r) => r.as === roleKey(current))?.label.split(" —")[0] ?? current.role : "guest"}
+        </span>
       </button>
     </div>
   );
