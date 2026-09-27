@@ -46,7 +46,7 @@ async function nimOnce(body: Record<string, unknown>, timeoutMs: number) {
 
 export async function chat(
   messages: Msg[],
-  opts: { maxTokens?: number; temperature?: number; timeoutMs?: number } = {},
+  opts: { maxTokens?: number; temperature?: number; timeoutMs?: number; validate?: (content: string) => void } = {},
 ): Promise<ChatResult> {
   const errors: string[] = [];
   for (const model of CHAT_MODELS) {
@@ -65,6 +65,7 @@ export async function chat(
       );
       const content: string = data.choices?.[0]?.message?.content ?? "";
       if (!content.trim()) throw new Error("empty content");
+      opts.validate?.(stripThink(content)); // unusable output falls through to the next model
       return { content: stripThink(content), model, ms: Date.now() - t0 };
     } catch (e) {
       errors.push(`${model}: ${(e as Error).message}`);
@@ -78,7 +79,7 @@ export async function chatJson<T>(
   messages: Msg[],
   opts: { maxTokens?: number; timeoutMs?: number } = {},
 ): Promise<{ data: T; model: string; ms: number }> {
-  const res = await chat(messages, { ...opts, temperature: 0 });
+  const res = await chat(messages, { ...opts, temperature: 0, validate: (c) => void extractJson(c) });
   return { data: extractJson<T>(res.content), model: res.model, ms: res.ms };
 }
 

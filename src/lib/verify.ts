@@ -42,7 +42,7 @@ export async function verifyDocument(input: {
     let ocrText = input.clientOcrText ?? "";
     let ocrEngine = "tesseract.js (on-device)";
     if (!input.clientOcrText) {
-      ocrBlocks = await ocrParse(input.image);
+      ocrBlocks = await bestOcr(input.image);
       ocrBlocks = ocrBlocks.map((b) => ({ ...b, text: cleanOcr(b.text) }));
       ocrText = ocrBlocks.map((b) => b.text).join("\n");
       ocrEngine = "nvidia/nemotron-parse";
@@ -72,6 +72,29 @@ export async function verifyDocument(input: {
   }
 }
 
+const isUnknown = (t: string) => /^\s*<unknown>\s*$/i.test(t);
+
+/**
+ * Nemotron-Parse is non-deterministic: on the same clear image a single read can return
+ * "<unknown>" for most regions, skip the body text, or garble a line. Read three times in
+ * parallel (same latency as one read) and keep the read whose words the other reads confirm
+ * most: an empty read and a garbled outlier both score low.
+ */
+async function bestOcr(image: string): Promise<OcrBlock[]> {
+  const reads = await Promise.allSettled([0, 1, 2].map(() => ocrParse(image)));
+  const ok = reads.flatMap((r) => (r.status === "fulfilled" ? [r.value.filter((b) => !isUnknown(b.text))] : []));
+  if (!ok.length) throw (reads[0] as PromiseRejectedResult).reason;
+  const words = ok.map((blocks) => new Set(blocks.flatMap((b) => b.text.toLowerCase().match(/[\p{L}\p{M}\p{N}]{2,}/gu) ?? [])));
+  // A word another read also saw counts fully; an unconfirmed word (maybe real, maybe garbled) counts a quarter
+  const score = (i: number) => {
+    const confirmed = [...words[i]].filter((w) => words.some((other, j) => j !== i && other.has(w))).length;
+    return confirmed + 0.25 * (words[i].size - confirmed);
+  };
+  let best = 0;
+  for (let i = 1; i < ok.length; i++) if (score(i) > score(best)) best = i;
+  return ok[best];
+}
+
 // Cache is per image + the form values it was checked against.
 function cacheKey(input: { sha256: string; expectedType: string; form: Record<string, string> }) {
   const fields = Object.keys(input.form).sort().map((k) => `${k}=${input.form[k]}`).join("|");
@@ -87,7 +110,7 @@ function simpleHash(s: string) {
 type LlmOut = {
   detected_type: string;
   extracted: Record<string, string | null>;
-  checks: { field: string; found: string | null; status: VerificationCheck["status"]; confidence: number; reason: string }[];
+  checks: { field: string; found: string | null; evidence?: string | null; status: VerificationCheck["status"]; confidence: number; reason: string }[];
   summary_en: string;
   summary_hi: string;
 };
@@ -120,10 +143,11 @@ Tasks:
    - "partial": minor spelling/transliteration variants (Dhruw vs Dhruv) or a missing middle name.
    - "mismatch": a different surname (e.g. Markam vs Dhruw) is ALWAYS a mismatch, even if marriage could explain it — put that explanation in reason. Also different person, date or value.
    OCR of Devanagari is noisy (dropped or extra vowel signs: साह for साहू, कुरेद for कुरूद). If the document also prints the value in Latin script, trust the Latin version. Differences explainable purely by such OCR noise count as "match" (confidence 0.8–0.9); mention the OCR noise in reason.
-   - "missing": the field cannot be found in the document.
+   - "missing": the field cannot be found in the document. Never fill in a value from the form: if the OCR text does not contain it, it is missing.
+   evidence: the exact snippet of the OCR text where you read the value, copied verbatim in its original script (null if missing).
    confidence is 0..1. reason is ONE short English sentence a government officer can understand, citing the two values; if mismatch, suggest the likely cause and fix (e.g. surname changed after marriage -> marriage certificate or gazette notification).
 4. summary_en / summary_hi: one-sentence verdict for the citizen in English and simple Hindi.
-Return ONLY JSON: {"detected_type": string, "extracted": {...}, "checks": [{"field","found","status","confidence","reason"}], "summary_en": string, "summary_hi": string}`,
+Return ONLY JSON: {"detected_type": string, "extracted": {...}, "checks": [{"field","found","evidence","status","confidence","reason"}], "summary_en": string, "summary_hi": string}`,
       },
       {
         role: "user",
@@ -150,11 +174,23 @@ CHECKS: ${JSON.stringify(toCheck)}`,
       confidence: clamp01(c?.confidence ?? 0.5),
       reason: c?.reason ?? "Field not evaluated by the model.",
     };
+    // Grounding guard: a value the model reports must actually be in the OCR text,
+    // so a misread document can never "match" by echoing the form back.
+    if (check.status !== "missing" && v.formField !== "dob" && !grounded([c?.evidence, check.found], ocrText)) {
+      check.status = "missing";
+      check.confidence = 0.5;
+      check.reason = `Could not read the ${v.label.en.toLowerCase()} clearly on this document; please retake the photo, or the officer will check it.`;
+    }
     // Deterministic guard for dates: never trust the model over exact comparison.
     if (v.formField === "dob") {
       const a = normDate(check.expected);
       const b = normDate(data.extracted?.dob ?? check.found ?? "");
-      if (a && b) {
+      if (b && !ocrDates(ocrText).has(b)) {
+        check.status = "missing";
+        check.found = null;
+        check.confidence = 0.5;
+        check.reason = "Could not read the date of birth clearly on this document; please retake the photo, or the officer will check it.";
+      } else if (a && b) {
         check.found = b;
         if (a === b) {
           check.status = "match";
@@ -222,6 +258,29 @@ export function similarity(a: string, b: string) {
   const x = norm(a), y = norm(b);
   if (!x || !y) return 0;
   return 1 - levenshtein(x, y) / Math.max(x.length, y.length);
+}
+
+/** Every word of the value (from the model's evidence or its reading) must appear, allowing for OCR noise, in the OCR text. */
+function grounded(values: (string | null | undefined)[], ocrText: string) {
+  const latin = (s: string) => s.toLowerCase().match(/[a-z]{3,}/g) ?? [];
+  const deva = (s: string) => s.match(/[\u0900-\u097F]{2,}/g) ?? [];
+  const ocrLatin = latin(ocrText);
+  const ocrDeva = deva(ocrText);
+  const present = (words: string[], pool: string[], min: number) =>
+    words.length > 0 && words.every((w) => pool.some((p) => ratio(w, p) >= min));
+  return values.some((v) => v && (present(latin(v), ocrLatin, 0.75) || present(deva(v), ocrDeva, 0.6)));
+}
+
+/** Character-level similarity of two strings in any script (1 = identical). */
+function ratio(a: string, b: string) {
+  return 1 - levenshtein(a, b) / Math.max(a.length, b.length);
+}
+
+/** All dates printed in the OCR text (Devanagari digits included), normalised to YYYY-MM-DD. */
+function ocrDates(ocrText: string) {
+  const ascii = ocrText.replace(/[०-९]/g, (d) => String(d.charCodeAt(0) - 0x966));
+  const found = ascii.match(/\d{4}-\d{1,2}-\d{1,2}|\d{1,2}[/.-]\d{1,2}[/.-]\d{4}/g) ?? [];
+  return new Set(found.map(normDate).filter(Boolean));
 }
 
 function clamp01(n: number) {

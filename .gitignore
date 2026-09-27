@@ -47,3 +47,7 @@ next-env.d.ts
 __pycache__/
 Thumbs.db
 !.env.example
+
+# Agent skills installed by marketplace integrations
+.agents/
+skills-lock.json

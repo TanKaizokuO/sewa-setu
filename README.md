@@ -4,7 +4,7 @@ An AI-first reimagining of Chhattisgarh's **Sewa Setu** portal. A citizen can fi
 
 > Built solo in 30 hours for the Sewa Setu hackathon (27–28 Sep 2026). All documents, people and data are **synthetic specimens**; DigiLocker, payments and department systems are mocked. Not an official government website.
 
-**Live demo:** _see submission link_ · **Repo:** https://github.com/TanKaizokuO/sewa-setu
+**Live demo:** https://sewa-setu-wine.vercel.app · **Repo:** https://github.com/TanKaizokuO/sewa-setu
 
 ---
 
@@ -84,14 +84,14 @@ flowchart LR
 ### AI document-verification pipeline
 
 1. **On device**: image scaled to 1648 px on the long side (best for Nemotron-Parse, and it keeps Devanagari vowel signs), sharpness and brightness checked, SHA-256 computed.
-2. **OCR**: `nvidia/nemotron-parse` returns text blocks with bounding boxes. Markdown / LaTeX artefacts are cleaned.
+2. **OCR**: `nvidia/nemotron-parse` returns text blocks with bounding boxes. Its reads vary run to run (a region can come back `<unknown>`), so the image is read three times in parallel and the read whose words the other reads confirm is kept. Markdown / LaTeX artefacts are cleaned.
 3. **Extraction and comparison**: a Nemotron LLM detects the document type, extracts the fields that service needs, and compares each to the form: `match` / `partial` / `mismatch` / `missing`, with a confidence score and a reason. Prompt rules cover Hindi-English transliteration, OCR noise in Devanagari, and "a different surname is always a mismatch".
-4. **Deterministic guards**: dates are normalised and compared in code, and a Levenshtein similarity ≥ 0.8 downgrades a "mismatch" to "partial", so an OCR slip like *Sinhawa* for *Sihawa* doesn't block a citizen.
+4. **Deterministic guards**: every value the model reports must be quoted from the OCR text, and code checks that quote, so a misread document becomes "missing" and never "matches" by echoing the form. Dates are normalised and compared in code, and a Levenshtein similarity ≥ 0.8 downgrades a "mismatch" to "partial", so an OCR slip like *Sinhawa* for *Sihawa* doesn't block a citizen.
 5. **Aggregate**: a score and verdict per application, which the officer sees and can override.
 
 ### Reliability (why the demo doesn't break)
 
-- Every AI call has a timeout, one retry when the hosted API is overloaded, and a fallback model (`nemotron-3-super-120b` → `gpt-oss-20b`).
+- Every AI call has a timeout, one retry when the hosted API is overloaded, and a fallback model (`nemotron-3-super-120b` → `gpt-oss-20b`), which also takes over if a reply isn't valid JSON.
 - If the LLM is unavailable, the officer still gets a rule-based verification note built from the same checks.
 - If cloud OCR is unreachable, the browser runs **Tesseract.js (Hindi + English) on-device** and the server verifies that text.
 - Real results are cached by image hash; if the live pipeline fails, the cached **real** result is served with a visible "cached" badge.

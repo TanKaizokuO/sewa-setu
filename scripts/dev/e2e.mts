@@ -1,7 +1,7 @@
 // API-level end-to-end: citizen verifies docs + submits; patwari forwards; tehsildar approves.
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-const B = "http://localhost:3000";
+const B = process.env.BASE_URL ?? "http://localhost:3000";
 const jar: Record<string, string> = {};
 async function call(who: string, path: string, body?: unknown) {
   const res = await fetch(B + path, { method: "POST", headers: { cookie: jar[who] ?? "" }, body: body ? JSON.stringify(body) : undefined });
