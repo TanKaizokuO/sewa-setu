@@ -104,7 +104,8 @@ export function ApplyWizard({
   }
 
   const allChecks = Object.values(docs).flatMap((d) => d?.result?.checks ?? []);
-  const issues = allChecks.filter((c) => c.status !== "match");
+  const issues = allChecks.filter((c) => c.status === "mismatch" || c.status === "missing");
+  const minor = allChecks.filter((c) => c.status === "partial");
   const steps = [tt("Details", "विवरण"), tt("Documents", "दस्तावेज़"), tt("Review & submit", "जांचें व जमा करें")];
 
   return (
@@ -272,6 +273,17 @@ export function ApplyWizard({
               </>
             )}
           </div>
+
+          {minor.length > 0 && (
+            <div className="rounded-2xl border bg-white p-4 text-sm">
+              <div className="font-medium">{tt("Minor differences — the officer will confirm", "छोटे अंतर — अधिकारी पुष्टि करेंगे")}</div>
+              <ul className="mt-1 space-y-0.5 text-xs text-muted-foreground">
+                {minor.map((c, i) => (
+                  <li key={i}>• <b>{c.label}:</b> {c.reason}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="rounded-2xl border bg-white p-4">
             <div className="mb-2 font-semibold">{tt("Your details", "आपका विवरण")}</div>

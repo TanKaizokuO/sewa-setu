@@ -165,6 +165,15 @@ CHECKS: ${JSON.stringify(toCheck)}`,
         }
       }
     }
+    // Guard against OCR noise: near-identical Latin spellings are never a hard mismatch
+    // (e.g. "Sinhawa" vs "Sihawa"). Completely different surnames still are.
+    if (check.status === "mismatch" && v.formField !== "dob" && check.found) {
+      const sim = similarity(check.expected, check.found);
+      if (sim >= 0.8) {
+        check.status = "partial";
+        check.reason = `Minor spelling difference ('${check.found}' vs '${check.expected}', ${Math.round(sim * 100)}% similar) — likely OCR noise; officer to confirm.`;
+      }
+    }
     return check;
   });
 
@@ -188,6 +197,28 @@ function cleanOcr(s: string) {
     .replace(/\s*&\s*/g, " | ")
     .replace(/\\\\/g, "")
     .trim();
+}
+
+function levenshtein(a: string, b: string) {
+  const dp = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = dp[0];
+    dp[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = dp[j];
+      dp[j] = Math.min(dp[j] + 1, dp[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = tmp;
+    }
+  }
+  return dp[b.length];
+}
+
+/** 0..1 similarity of the Latin letters in two strings (1 = identical). */
+export function similarity(a: string, b: string) {
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z]/g, "");
+  const x = norm(a), y = norm(b);
+  if (!x || !y) return 0;
+  return 1 - levenshtein(x, y) / Math.max(x.length, y.length);
 }
 
 function clamp01(n: number) {
