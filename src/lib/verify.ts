@@ -57,8 +57,8 @@ export async function verifyDocument(input: {
       ms: Date.now() - t0,
       cached: false,
     };
-    // Only cloud results are cached, so an on-device fallback never replaces a better reading
-    if (!input.clientOcrText)
+    // Only clean cloud readings are cached, so an on-device fallback or a misread never replaces a good one
+    if (!input.clientOcrText && result.typeMatches && !result.checks.some((c) => c.status === "missing"))
       await db
         .insert(ocrCache)
         .values({ sha256: cacheKey(input), result })

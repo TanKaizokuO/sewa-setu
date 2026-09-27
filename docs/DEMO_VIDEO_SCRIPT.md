@@ -28,5 +28,6 @@ Record each scene as a separate clip. If the AI is slow, cut the wait in editing
 
 - **Assistant is slow or shows "AI assistant is busy"**: keep going; the keyword fallback still shows the service card. Re-record the clip later.
 - **A document shows "cached"**: that's the real earlier result being reused because the live API was slow. Fine to show; mention it if asked.
+- **A check shows Partial or Not found on a demo document**: OCR reads vary a little between runs. Click **Fetch from DigiLocker** again for that document, or re-record the clip.
 - **Verification error**: click **Retry**. If cloud OCR is down, the browser runs on-device OCR automatically (the stepper says "on-device").
 - **Messed-up data**: Reset demo, then redo from scene 2.
