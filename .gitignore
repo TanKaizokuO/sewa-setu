@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local tooling
+.venv/
+.omp/
+.claude/
+__pycache__/
+Thumbs.db
+!.env.example
