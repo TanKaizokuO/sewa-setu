@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx --env-file=.env scripts/seed.mts",
+    "db:push": "drizzle-kit push --force"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
