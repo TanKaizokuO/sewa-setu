@@ -15,7 +15,7 @@
 ![Postgres](https://img.shields.io/badge/Postgres_·_Neon-4169E1?logo=postgresql&logoColor=white)
 ![NVIDIA NIM](https://img.shields.io/badge/NVIDIA_NIM-76B900?logo=nvidia&logoColor=white)
 
-[The problem](#-the-problem) · [Features](#-what-sewa-setu-does) · [Demo walkthrough](#-demo-walkthrough--4-min) · [Architecture](#%EF%B8%8F-architecture) · [Run locally](#-run-locally) · [Responsible AI](#%EF%B8%8F-responsible-ai)
+[The problem](#-the-problem) · [Features](#-what-sewa-setu-does) · [Screenshots](#-screenshots) · [Demo walkthrough](#-demo-walkthrough--4-min) · [Architecture](#%EF%B8%8F-architecture) · [Run locally](#-run-locally) · [Responsible AI](#%EF%B8%8F-responsible-ai)
 
 </div>
 
@@ -25,6 +25,12 @@ An AI-first reimagining of Chhattisgarh's **Sewa Setu** portal. A citizen can fi
 
 > [!NOTE]
 > Built solo in 30 hours for the Sewa Setu hackathon (27–28 Sep 2026). All documents, people and data are **synthetic specimens**; DigiLocker, payments and department systems are mocked. **Not an official government website.**
+
+<p align="center">
+  <img src="docs/screenshots/document-evidence.png" alt="Officer view of an application: AI pre-verification summary, OCR bounding boxes on the Aadhaar and ration card, per-field match and mismatch checks, SLA-breach risk and audit trail" width="100%" />
+  <br />
+  <sub><i>Every document is read and cross-checked by AI before it reaches the officer, with the evidence, a reason, and a one-click override.</i></sub>
+</p>
 
 ## 🧩 The problem
 
@@ -65,6 +71,22 @@ Getting an income or caste certificate today often means several trips to a Lok 
 | **Analytics**: 14-day demand forecast, breach rate by district, predicted breaches in the next week, grievance hotspots, and an **AI briefing for the Collector** | Seasonality × trend forecast, risk model, LLM summary |
 
 **17 services** are in the catalog, all config-driven in [`src/lib/services.ts`](src/lib/services.ts). Income, caste and domicile certificates have the full AI apply flow; adding another is a config entry, not new code.
+
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/assistant.png" alt="Sewa Sahayak answering a Hindi request for an income certificate" /><p align="center"><b>Sewa Sahayak</b>: ask in Hindi, get the service, documents and fee</p></td>
+    <td width="50%"><img src="docs/screenshots/dashboard.png" alt="Citizen dashboard with applications, notifications and recommendations" /><p align="center"><b>Citizen dashboard</b>: applications, notifications, recommendations</p></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/track.png" alt="Application tracking page with progress bar, SLA guarantee and live timeline" /><p align="center"><b>Live tracking</b>: SLA countdown and an audit-backed timeline</p></td>
+    <td width="50%"><img src="docs/screenshots/officer-queue.png" alt="Patwari queue sorted by SLA-breach risk with AI pre-verification results" /><p align="center"><b>Officer queue</b>: sorted by breach risk, AI verdict per file</p></td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="docs/screenshots/analytics.png" alt="District analytics with KPIs, AI briefing for the Collector, demand forecast and predicted SLA breaches" /><p align="center"><b>District analytics</b>: KPIs, AI briefing for the Collector, 14-day forecast, predicted breaches</p></td>
+  </tr>
+</table>
 
 ## 🎬 Demo walkthrough (≈ 4 min)
 
